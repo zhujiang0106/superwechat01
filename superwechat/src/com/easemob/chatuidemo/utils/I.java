@@ -65,6 +65,7 @@ public interface I {
 	String PAGE_ID 										= 		"page_id";						//分页的起始下标
 	String PAGE_SIZE 									= 		"page_size";					//分页的每页数量
 	int DEFAULT_DISTANCE = 100; // 查找附近的人时，默认距离为100KM
+	String QUESTION 									= 		"?";							//问号
 	int ID_DEFAULT										=		0;								//ID默认值
 	int UN_READ_MSG_COUNT_DEFAULT					=		0;								//未读消息数量默认值
 	int GROUP_MAX_USERS_DEFAULT 						= 		-1;								//群组最大人数默认值

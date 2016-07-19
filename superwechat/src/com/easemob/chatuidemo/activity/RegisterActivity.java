@@ -17,7 +17,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,7 +25,7 @@ import android.widget.Toast;
 
 import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
-import com.easemob.chatuidemo.DemoApplication;
+import com.easemob.chatuidemo.SuperWeChatApplication;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.listener.OnSetAvatarListener;
 import com.easemob.chatuidemo.utils.I;
@@ -146,7 +145,7 @@ public class RegisterActivity extends BaseActivity {
 								if (!RegisterActivity.this.isFinishing())
 									pd.dismiss();
 								// 保存用户名
-								DemoApplication.getInstance().setUserName(username);
+								SuperWeChatApplication.getInstance().setUserName(username);
 								Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registered_successfully), Toast.LENGTH_SHORT).show();
 								finish();
 							}

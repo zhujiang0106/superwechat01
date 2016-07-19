@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eff2f6"
+    android:id="@+id/activity_register"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -149,6 +150,7 @@
                 android:textSize="18sp" />
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/layout_register_avatar"
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:layout_marginLeft="20dp"
@@ -172,8 +174,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/iv_avatar"
                 android:background="@null"
-                android:hint="头像"
-                android:inputType="textPassword"
+                android:hint="@string/dl_title_upload_photo"
                 android:paddingLeft="10dip"
                 android:singleLine="true"
                 android:textSize="18sp" />
@@ -188,6 +189,7 @@
             android:orientation="horizontal" >
 
             <Button
+                android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
@@ -198,10 +200,11 @@
                 android:onClick="register"
                 android:paddingBottom="7dp"
                 android:paddingTop="7dp"
-                android:text="@string/register"
+                android:text="@string/login"
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
             <Button
+                android:id="@+id/btn_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"

@@ -1,6 +1,8 @@
 package com.easemob.chatuidemo.bean;
 
-public class UserAvatar {
+import java.io.Serializable;
+
+public class UserAvatar implements Serializable{
 	private String muserName;
 //	private String muserPassword;
 	private String muserNick;

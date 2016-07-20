@@ -267,6 +267,14 @@ public class OkHttpUtils2<T> {
         if (mUrl == null) {
             return this;
         }
+        mFileBody = RequestBody.create(null, file);
+        return this;
+    }
+
+    public OkHttpUtils2<T> addFile1(File file) {
+        if (mUrl == null) {
+            return this;
+        }
         RequestBody fileBody = RequestBody.create(MediaType.parse(guessMimeType(file.getName())), file);
 
         mFileBody = new MultipartBuilder()

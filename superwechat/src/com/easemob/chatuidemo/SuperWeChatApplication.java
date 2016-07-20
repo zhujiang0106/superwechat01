@@ -19,6 +19,8 @@ import android.content.Context;
 import com.easemob.EMCallBack;
 import com.easemob.chatuidemo.bean.UserAvatar;
 
+import java.util.ArrayList;
+
 public class SuperWeChatApplication extends Application {
 
 	public static Context applicationContext;
@@ -110,6 +112,7 @@ public class SuperWeChatApplication extends Application {
 	}
 
 	private UserAvatar user;
+	private ArrayList<UserAvatar> userList;
 
 	public UserAvatar getUser() {
 		return user;
@@ -117,5 +120,13 @@ public class SuperWeChatApplication extends Application {
 
 	public void setUser(UserAvatar user) {
 		this.user = user;
+	}
+
+	public ArrayList<UserAvatar> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(ArrayList<UserAvatar> userList) {
+		this.userList = userList;
 	}
 }

@@ -19,6 +19,7 @@ import java.util.Map;
 import android.content.Context;
 
 
+import com.easemob.chatuidemo.bean.UserAvatar;
 import com.easemob.chatuidemo.domain.RobotUser;
 import com.easemob.chatuidemo.domain.User;
 
@@ -107,4 +108,13 @@ public class UserDao {
     public void saveRobotUser(List<RobotUser> robotList){
     	DemoDBManager.getInstance().saveRobotList(robotList);
     }
+
+	/**
+	 * 保存当前登录用户
+	 *
+	 * @param user
+	 */
+	public void saveUserAvatar(UserAvatar user) {
+		DemoDBManager.getInstance().saveUserAvatar(user);
+	}
 }

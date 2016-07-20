@@ -40,11 +40,13 @@ import com.easemob.chatuidemo.SuperWeChatApplication;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.bean.Result;
+import com.easemob.chatuidemo.bean.UserAvatar;
 import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.chatuidemo.utils.I;
+import com.easemob.chatuidemo.utils.Utils;
 
 /**
  * 登陆页面
@@ -185,10 +187,13 @@ public class LoginActivity extends BaseActivity {
 					@Override
 					public void onSuccess(Result result) {
 						if (result != null & result.isRetMsg()) {
+							UserAvatar user = (UserAvatar) result.getRetData();
+							saveUser2DB(user);
 							loginSuccess();
 						} else {
 							pd.dismiss();
-							Toast.makeText(getApplicationContext(), R.string.Login_failed + result.getRetCode(), Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), R.string.Login_failed+ Utils.getResourceString(LoginActivity.this,result.getRetCode()),
+									Toast.LENGTH_SHORT).show();
 						}
 					}
 
@@ -199,6 +204,13 @@ public class LoginActivity extends BaseActivity {
 						Toast.makeText(getApplicationContext(), R.string.Login_failed, Toast.LENGTH_SHORT).show();
 					}
 				});
+	}
+
+	private void saveUser2DB(UserAvatar user) {
+		if (user != null) {
+			UserDao dao = new UserDao(LoginActivity.this);
+			dao.saveUserAvatar(user);
+		}
 	}
 
 	private void loginSuccess() {

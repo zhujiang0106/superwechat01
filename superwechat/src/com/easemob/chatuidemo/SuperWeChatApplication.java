@@ -17,6 +17,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.easemob.EMCallBack;
+import com.easemob.chatuidemo.bean.UserAvatar;
 
 public class SuperWeChatApplication extends Application {
 
@@ -106,5 +107,15 @@ public class SuperWeChatApplication extends Application {
 	public void logout(final boolean isGCM,final EMCallBack emCallBack) {
 		// 先调用sdk logout，在清理app中自己的数据
 	    hxSDKHelper.logout(isGCM,emCallBack);
+	}
+
+	private UserAvatar user;
+
+	public UserAvatar getUser() {
+		return user;
+	}
+
+	public void setUser(UserAvatar user) {
+		this.user = user;
 	}
 }

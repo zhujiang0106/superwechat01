@@ -36,6 +36,7 @@ import com.easemob.chatuidemo.bean.Result;
 import com.easemob.chatuidemo.bean.UserAvatar;
 import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.utils.I;
+import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.chatuidemo.utils.Utils;
 
 public class AddContactActivity extends BaseActivity{
@@ -103,7 +104,9 @@ public class AddContactActivity extends BaseActivity{
 								if (user != null) {
 									//服务器存在此用户，显示此用户和添加按钮
 									searchedUserLayout.setVisibility(View.VISIBLE);
-									nameText.setText(toAddUsername);
+									UserUtils.setAppUserNick(user.getMUserNick(), nameText);
+									UserUtils.setAppUserAvatar(AddContactActivity.this, toAddUsername, avatar);
+//									nameText.setText(toAddUsername);
 									tvNothing.setVisibility(View.GONE);
 								}
 							} else {

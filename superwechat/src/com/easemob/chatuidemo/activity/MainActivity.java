@@ -228,12 +228,12 @@ public class MainActivity extends BaseActivity implements EMEventListener {
                 userlist.put(Constant.GROUP_USERNAME, groupUser);
                 
                  // 添加"聊天室"
-                User chatRoomItem = new User();
-                String strChatRoom = context.getString(R.string.chat_room);
-                chatRoomItem.setUsername(Constant.CHAT_ROOM);
-                chatRoomItem.setNick(strChatRoom);
-                chatRoomItem.setHeader("");
-                userlist.put(Constant.CHAT_ROOM, chatRoomItem);
+//                User chatRoomItem = new User();
+//                String strChatRoom = context.getString(R.string.chat_room);
+//                chatRoomItem.setUsername(Constant.CHAT_ROOM);
+//                chatRoomItem.setNick(strChatRoom);
+//                chatRoomItem.setHeader("");
+//                userlist.put(Constant.CHAT_ROOM, chatRoomItem);
                 
                 // 添加"Robot"
         		User robotUser = new User();

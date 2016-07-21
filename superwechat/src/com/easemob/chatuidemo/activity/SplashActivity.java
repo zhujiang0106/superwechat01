@@ -13,6 +13,10 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.SuperWeChatApplication;
+import com.easemob.chatuidemo.bean.UserAvatar;
+import com.easemob.chatuidemo.db.UserDao;
+import com.easemob.chatuidemo.task.DownloadContactsListTask;
 
 /**
  * 开屏页
@@ -51,6 +55,14 @@ public class SplashActivity extends BaseActivity {
 					long start = System.currentTimeMillis();
 					EMGroupManager.getInstance().loadAllGroups();
 					EMChatManager.getInstance().loadAllConversations();
+
+					String userName = SuperWeChatApplication.getInstance().getUserName();
+					UserDao dao = new UserDao(SplashActivity.this);
+					UserAvatar user = dao.getUserAvatar(userName);
+					SuperWeChatApplication.getInstance().setUser(user);
+					SuperWeChatApplication.currentUserNick = user.getMUserNick();
+					new DownloadContactsListTask(SplashActivity.this,userName).getContacts();
+
 					long costTime = System.currentTimeMillis() - start;
 					//等待sleeptime时长
 					if (sleepTime - costTime > 0) {

@@ -210,9 +210,11 @@ public class ContactAdapter extends ArrayAdapter<User>  implements SectionIndexe
 				for(int i=0;i<count;i++){
 					final User user = mOriginalList.get(i);
 					String username = user.getUsername();
-					
-					if(username.startsWith(prefixString)){
-						newValues.add(user);
+					// 将原代码中的startWith改为contains，就是以。。。开始改为包含。。。
+					if(username.contains(prefixString)){
+						if (!username.equals(Constant.GROUP_USERNAME)&&!username.equals(Constant.NEW_FRIENDS_USERNAME)){
+							newValues.add(user);
+						}
 					}
 					else{
 						 final String[] words = username.split(" ");

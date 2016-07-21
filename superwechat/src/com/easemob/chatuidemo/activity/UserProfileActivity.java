@@ -27,6 +27,7 @@ import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.SuperWeChatApplication;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.UserUtils;
 import com.squareup.picasso.Picasso;
@@ -76,9 +77,13 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			iconRightArrow.setVisibility(View.INVISIBLE);
 		}
 		if (username == null) {
-			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
-			UserUtils.setCurrentUserNick(tvNickName);
-			UserUtils.setCurrentUserAvatar(this, headAvatar);
+			String userName = SuperWeChatApplication.getInstance().getUserName();
+			tvUsername.setText(userName);
+			UserUtils.setAppUserNick(userName,tvNickName);
+			UserUtils.setAppUserAvatar(this,userName,headAvatar);
+//			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
+//			UserUtils.setCurrentUserNick(tvNickName);
+//			UserUtils.setCurrentUserAvatar(this, headAvatar);
 		} else if (username.equals(EMChatManager.getInstance().getCurrentUser())) {
 			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
 			UserUtils.setCurrentUserNick(tvNickName);

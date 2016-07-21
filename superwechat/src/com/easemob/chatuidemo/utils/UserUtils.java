@@ -2,6 +2,7 @@ package com.easemob.chatuidemo.utils;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -125,6 +126,8 @@ public class UserUtils {
     public static void setAppUserNick(String username, TextView nameTextview) {
         UserAvatar user = getAppUserInfo(username);
         if (user != null) {
+            Log.i("main", "我的昵称:" + user.getMUserNick());
+            Log.i("main", "我的账号:" + user.getMUserName());
             if (user.getMUserNick() != null) {
                 nameTextview.setText(user.getMUserNick());
             } else {

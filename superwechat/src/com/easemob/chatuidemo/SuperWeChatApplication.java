@@ -20,6 +20,8 @@ import com.easemob.EMCallBack;
 import com.easemob.chatuidemo.bean.UserAvatar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SuperWeChatApplication extends Application {
 
@@ -112,7 +114,16 @@ public class SuperWeChatApplication extends Application {
 	}
 
 	private UserAvatar user;
-	private ArrayList<UserAvatar> userList;
+	private ArrayList<UserAvatar> userList = new ArrayList<UserAvatar>();
+	private Map<String, UserAvatar> userMap = new HashMap<String, UserAvatar>();
+
+	public Map<String, UserAvatar> getUserMap() {
+		return userMap;
+	}
+
+	public void setUserMap(Map<String, UserAvatar> userMap) {
+		this.userMap = userMap;
+	}
 
 	public UserAvatar getUser() {
 		return user;

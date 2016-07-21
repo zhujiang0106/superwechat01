@@ -7,8 +7,10 @@ import android.widget.TextView;
 
 import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
+import com.easemob.chatuidemo.SuperWeChatApplication;
 import com.easemob.chatuidemo.UserProfileManager;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.bean.UserAvatar;
 import com.easemob.chatuidemo.domain.User;
 import com.squareup.picasso.Picasso;
 
@@ -31,6 +33,13 @@ public class UserUtils {
         }
         return user;
     }
+    public static UserAvatar getAppUserInfo(String username){
+        UserAvatar user = SuperWeChatApplication.getInstance().getUserMap().get(username);
+        if(user == null){
+            user = new UserAvatar(username);
+        }
+        return user;
+    }
     
     /**
      * 设置用户头像
@@ -44,7 +53,30 @@ public class UserUtils {
             Picasso.with(context).load(R.drawable.default_avatar).into(imageView);
         }
     }
-    
+    /**
+     * 设置用户联系人头像
+     * @param username
+     */
+    public static void setAppUserAvatar(Context context, String username, ImageView imageView){
+        String path = "";
+        if(path != null && username != null){
+            path = getUserAvatarPath(username);
+            Picasso.with(context).load(path).placeholder(R.drawable.default_avatar).into(imageView);
+        }else{
+            Picasso.with(context).load(R.drawable.default_avatar).into(imageView);
+        }
+    }
+
+    private static String getUserAvatarPath(String username) {
+        StringBuilder path = new StringBuilder(I.SERVER_TOOL);
+        path.append(I.QUESTION).append(I.KEY_REQUEST)
+                .append(I.EQUALS).append(I.REQUEST_DOWNLOAD_AVATAR)
+                .append(I.AND).append(I.NAME_OR_HXID).append(I.EQUALS)
+                .append(username).append(I.AND).append(I.AVATAR_TYPE)
+                .append(I.EQUALS).append(I.AVATAR_TYPE_USER_PATH);
+        return path.toString();
+    }
+
     /**
      * 设置当前用户头像
      */
@@ -81,7 +113,7 @@ public class UserUtils {
     
     /**
      * 保存或更新某个用户
-     * @param user
+     * @param newUser
      */
 	public static void saveUserInfo(User newUser) {
 		if (newUser == null || newUser.getUsername() == null) {
@@ -89,5 +121,17 @@ public class UserUtils {
 		}
 		((DemoHXSDKHelper) HXSDKHelper.getInstance()).saveContact(newUser);
 	}
-    
+
+    public static void setAppUserNick(String username, TextView nameTextview) {
+        UserAvatar user = getAppUserInfo(username);
+        if (user != null) {
+            if (user.getMUserNick() != null) {
+                nameTextview.setText(user.getMUserNick());
+            } else {
+                nameTextview.setText(username);
+            }
+        } else {
+            nameTextview.setText(username);
+        }
+    }
 }

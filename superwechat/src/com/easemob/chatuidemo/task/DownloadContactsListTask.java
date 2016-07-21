@@ -12,6 +12,7 @@ import com.easemob.chatuidemo.utils.I;
 import com.easemob.chatuidemo.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2016/7/20.
@@ -38,6 +39,11 @@ public class DownloadContactsListTask {
                         if (list != null && list.size() > 0) {
                             SuperWeChatApplication.getInstance().setUserList(list);
                             mContext.sendStickyBroadcast(new Intent("update_contact_list"));
+                            Map<String, UserAvatar> userMap = SuperWeChatApplication.getInstance().getUserMap();
+                            for (UserAvatar u : list) {
+                                Log.i("main", u.getMUserName());
+                                userMap.put(u.getMUserName(), u);
+                            }
                         }
                     }
 

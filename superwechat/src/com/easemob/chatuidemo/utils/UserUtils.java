@@ -12,6 +12,7 @@ import com.easemob.chatuidemo.SuperWeChatApplication;
 import com.easemob.chatuidemo.UserProfileManager;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.bean.UserAvatar;
+import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.domain.User;
 import com.squareup.picasso.Picasso;
 
@@ -131,7 +132,7 @@ public class UserUtils {
             }
         }
     }
-    
+
     /**
      * 保存或更新某个用户
      * @param newUser
@@ -157,4 +158,5 @@ public class UserUtils {
             nameTextview.setText(username);
         }
     }
+
 }

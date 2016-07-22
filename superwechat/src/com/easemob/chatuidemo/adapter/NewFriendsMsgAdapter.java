@@ -32,11 +32,17 @@ import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
+import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.bean.Result;
+import com.easemob.chatuidemo.bean.UserAvatar;
+import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
+import com.easemob.chatuidemo.utils.I;
 import com.easemob.chatuidemo.utils.UserUtils;
+import com.easemob.chatuidemo.utils.Utils;
 
 public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 
@@ -84,9 +90,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			}
 			
 			holder.reason.setText(msg.getReason());
-			String userName = msg.getFrom();
-			UserUtils.setAppUserNick(userName,holder.name);
-			UserUtils.setAppUserAvatar(this.getContext(),userName,holder.avator);
 //			holder.name.setText(msg.getFrom());
 			// holder.time.setText(DateUtils.getTimestampString(new
 			// Date(msg.getTime())));
@@ -128,6 +131,31 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 			}
 
 			// 设置用户头像
+			String userName = msg.getFrom();
+			UserUtils.setAppUserNick(userName,holder.name);
+			//设置用户昵称
+			UserUtils.setAppUserAvatar(this.getContext(),userName,holder.avator);
+			final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
+			utils.setRequestUrl(I.REQUEST_FIND_USER)
+					.addParam(I.User.USER_NAME,userName)
+					.targetClass(String.class)
+					.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+						@Override
+						public void onSuccess(String str) {
+							Result result = Utils.getResultFromJson(str, UserAvatar.class);
+							if (result != null & result.isRetMsg()) {
+								UserAvatar user = (UserAvatar) result.getRetData();
+								if (user != null) {
+									UserUtils.setAppUserNick(user,holder.name);
+								}
+							} else {
+							}
+						}
+
+						@Override
+						public void onError(String error) {
+						}
+					});
 		}
 
 		return convertView;

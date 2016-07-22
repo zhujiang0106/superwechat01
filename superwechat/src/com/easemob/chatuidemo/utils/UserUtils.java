@@ -144,18 +144,27 @@ public class UserUtils {
 		((DemoHXSDKHelper) HXSDKHelper.getInstance()).saveContact(newUser);
 	}
 
+    /**
+     * 设置用户好友昵称
+     * @param username
+     * @param nameTextview
+     */
     public static void setAppUserNick(String username, TextView nameTextview) {
         UserAvatar user = getAppUserInfo(username);
+       setAppUserNick(user,nameTextview);
+    }
+    /**
+     * 设置用户昵称
+     * @param user
+     * @param nameTextview
+     */
+    public static void setAppUserNick(UserAvatar user, TextView nameTextview) {
         if (user != null) {
-            Log.i("main", "我的昵称:" + user.getMUserNick());
-            Log.i("main", "我的账号:" + user.getMUserName());
             if (user.getMUserNick() != null) {
                 nameTextview.setText(user.getMUserNick());
             } else {
-                nameTextview.setText(username);
+                nameTextview.setText(user.getMUserName());
             }
-        } else {
-            nameTextview.setText(username);
         }
     }
 

@@ -581,7 +581,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			// 被删除
 			String currentUserName = SuperWeChatApplication.getInstance().getUserName();
 			for (final String username : usernameList) {
-				final OkHttpUtils2<Result> utils = new OkHttpUtils2<Result>();
+				/*final OkHttpUtils2<Result> utils = new OkHttpUtils2<Result>();
 				utils.setRequestUrl(I.REQUEST_DELETE_CONTACT)
 						.addParam(I.Contact.USER_NAME,currentUserName)
 						.addParam(I.Contact.CU_NAME,username)
@@ -602,7 +602,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 							public void onError(String error) {
 
 							}
-						});
+						});*/
 			}
 			runOnUiThread(new Runnable() {
 				public void run() {

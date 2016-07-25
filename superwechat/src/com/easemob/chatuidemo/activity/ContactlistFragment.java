@@ -57,10 +57,15 @@ import com.easemob.chat.EMContactManager;
 import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.SuperWeChatApplication;
 import com.easemob.chatuidemo.adapter.ContactAdapter;
+import com.easemob.chatuidemo.bean.Result;
+import com.easemob.chatuidemo.bean.UserAvatar;
+import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.User;
+import com.easemob.chatuidemo.utils.I;
 import com.easemob.chatuidemo.widget.Sidebar;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
@@ -103,7 +108,7 @@ public class ContactlistFragment extends Fragment {
                                 refresh();
 		                    }else{
 		                        String s1 = getResources().getString(R.string.get_failed_please_check);
-		                        Toast.makeText(getActivity(), s1, 1).show();
+		                        Toast.makeText(getActivity(), s1, Toast.LENGTH_SHORT).show();
 		                        progressBar.setVisibility(View.GONE);
 		                    }
 		                }
@@ -319,11 +324,13 @@ public class ContactlistFragment extends Fragment {
 			refresh();
 		}
 	}
+	private InviteMessgeDao inviteMessgeDao;
+	private UserDao userDao;
 
 	/**
 	 * 删除联系人
 	 * 
-	 * @param toDeleteUser
+	 * @param tobeDeleteUser
 	 */
 	public void deleteContact(final User tobeDeleteUser) {
 		String st1 = getResources().getString(R.string.deleting);
@@ -352,7 +359,7 @@ public class ContactlistFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getActivity(), st2 + e.getMessage(), 1).show();
+							Toast.makeText(getActivity(), st2 + e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
 
@@ -360,7 +367,31 @@ public class ContactlistFragment extends Fragment {
 
 			}
 		}).start();
+		String currentUserName = SuperWeChatApplication.getInstance().getUserName();
+		final OkHttpUtils2<Result> utils = new OkHttpUtils2<Result>();
+		utils.setRequestUrl(I.REQUEST_DELETE_CONTACT)
+				.addParam(I.Contact.USER_NAME,currentUserName)
+				.addParam(I.Contact.CU_NAME,tobeDeleteUser.getUsername())
+				.targetClass(Result.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
+					@Override
+					public void onSuccess(Result result) {
+						((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().remove(tobeDeleteUser.getUsername());
+						UserAvatar u = SuperWeChatApplication.getInstance().getUserMap().get(tobeDeleteUser.getUsername());
+						SuperWeChatApplication.getInstance().getUserList().remove(u);
+						SuperWeChatApplication.getInstance().getUserMap().remove(tobeDeleteUser.getUsername());
+						userDao = new UserDao(getActivity());
+						inviteMessgeDao = new InviteMessgeDao(getActivity());
+						userDao.deleteContact(tobeDeleteUser.getUsername());
+						inviteMessgeDao.deleteMessage(tobeDeleteUser.getUsername());
+						getActivity().sendStickyBroadcast(new Intent("update_contact_list"));
+					}
 
+					@Override
+					public void onError(String error) {
+
+					}
+				});
 	}
 
 	/**
@@ -382,7 +413,7 @@ public class ContactlistFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getActivity(), st2, 0).show();
+							Toast.makeText(getActivity(), st2, Toast.LENGTH_SHORT).show();
 							refresh();
 						}
 					});
@@ -391,7 +422,7 @@ public class ContactlistFragment extends Fragment {
 					getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							pd.dismiss();
-							Toast.makeText(getActivity(), st3, 0).show();
+							Toast.makeText(getActivity(), st3, Toast.LENGTH_SHORT).show();
 						}
 					});
 				}

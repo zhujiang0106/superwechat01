@@ -1,6 +1,7 @@
 package com.easemob.chatuidemo.activity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -13,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,6 +35,7 @@ import com.easemob.chatuidemo.bean.UserAvatar;
 import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.User;
+import com.easemob.chatuidemo.listener.OnSetAvatarListener;
 import com.easemob.chatuidemo.utils.I;
 import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.chatuidemo.utils.Utils;
@@ -49,6 +52,9 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	private TextView tvUsername;
 	private ProgressDialog dialog;
 	private RelativeLayout rlNickName;
+
+	private OnSetAvatarListener mOnSetAvatarListener;
+	private String avatarName;
 	
 	
 	
@@ -104,7 +110,8 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.user_head_avatar:
-			uploadHeadPhoto();
+//			uploadHeadPhoto();
+			mOnSetAvatarListener = new OnSetAvatarListener(UserProfileActivity.this, R.id.layout_upload_avatar, getAvatarName(), I.AVATAR_TYPE_USER_PATH);
 			break;
 		case R.id.rl_nickname:
 			final EditText editText = new EditText(this);
@@ -126,6 +133,11 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			break;
 		}
 
+	}
+
+	private String getAvatarName() {
+		avatarName = String.valueOf(System.currentTimeMillis());
+		return avatarName;
 	}
 
 	private void updateUserNick(final String nickString) {
@@ -266,6 +278,41 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode != RESULT_OK) {
+			return;
+		}
+		mOnSetAvatarListener.setAvatar(requestCode,data,headAvatar);
+		if (requestCode == OnSetAvatarListener.REQUEST_CROP_PHOTO) {
+			uploadUserAvatar();
+		}
+	}
+
+	private void uploadUserAvatar() {
+		File file = new File(OnSetAvatarListener.getAvatarPath(UserProfileActivity.this, I.AVATAR_TYPE_USER_PATH), avatarName + I.AVATAR_SUFFIX_JPG);
+		String userName = SuperWeChatApplication.getInstance().getUserName();
+		final OkHttpUtils2<Result> utils = new OkHttpUtils2<Result>();
+		utils.setRequestUrl(I.REQUEST_UPLOAD_AVATAR)
+				.addParam(I.NAME_OR_HXID,userName)
+				.addParam(I.AVATAR_TYPE,I.AVATAR_TYPE_USER_PATH)
+				.targetClass(Result.class)
+				.addFile(file)
+				.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
+					@Override
+					public void onSuccess(Result result) {
+						if (result.isRetMsg()) {
+							Toast.makeText(UserProfileActivity.this,"头像更新成功",Toast.LENGTH_LONG).show();
+						} else {
+							Toast.makeText(UserProfileActivity.this, getString(R.string.toast_updatephoto_fail),
+									Toast.LENGTH_SHORT).show();
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+						Toast.makeText(UserProfileActivity.this, getString(R.string.toast_updatephoto_fail),
+								Toast.LENGTH_SHORT).show();
+					}
+				});
 	}
 
 	public void startPhotoZoom(Uri uri) {

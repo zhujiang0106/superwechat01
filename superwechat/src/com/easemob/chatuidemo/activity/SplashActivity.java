@@ -8,15 +8,20 @@ import android.os.Bundle;
 import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
 import com.easemob.chatuidemo.SuperWeChatApplication;
+import com.easemob.chatuidemo.bean.Result;
 import com.easemob.chatuidemo.bean.UserAvatar;
+import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.task.DownloadContactsListTask;
+import com.easemob.chatuidemo.utils.I;
+import com.easemob.chatuidemo.utils.Utils;
 
 /**
  * 开屏页
@@ -59,7 +64,29 @@ public class SplashActivity extends BaseActivity {
 					String userName = SuperWeChatApplication.getInstance().getUserName();
 					UserDao dao = new UserDao(SplashActivity.this);
 					UserAvatar user = dao.getUserAvatar(userName);
-					if (user != null) {
+					if (user == null) {
+						final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
+						utils.setRequestUrl(I.REQUEST_FIND_USER)
+								.addParam(I.User.USER_NAME,userName)
+								.targetClass(String.class)
+								.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+									@Override
+									public void onSuccess(String str) {
+										Result result = Utils.getResultFromJson(str, UserAvatar.class);
+										if (result != null & result.isRetMsg()) {
+											UserAvatar user = (UserAvatar) result.getRetData();
+											if (user != null) {
+												SuperWeChatApplication.getInstance().setUser(user);
+												SuperWeChatApplication.currentUserNick = user.getMUserNick();
+											}
+										}
+									}
+
+									@Override
+									public void onError(String error) {
+									}
+								});
+					} else {
 						SuperWeChatApplication.getInstance().setUser(user);
 						SuperWeChatApplication.currentUserNick = user.getMUserNick();
 					}

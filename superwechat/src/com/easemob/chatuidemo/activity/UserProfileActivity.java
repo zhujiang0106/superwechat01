@@ -31,6 +31,7 @@ import com.easemob.chatuidemo.SuperWeChatApplication;
 import com.easemob.chatuidemo.bean.Result;
 import com.easemob.chatuidemo.bean.UserAvatar;
 import com.easemob.chatuidemo.data.OkHttpUtils2;
+import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.utils.I;
 import com.easemob.chatuidemo.utils.UserUtils;
@@ -140,6 +141,10 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 						if (result != null & result.isRetMsg()) {
 							UserAvatar user = (UserAvatar) result.getRetData();
 							if (user != null) {
+								SuperWeChatApplication.getInstance().setUser(user);
+								SuperWeChatApplication.currentUserNick = user.getMUserNick();
+								UserDao dao = new UserDao(UserProfileActivity.this);
+								dao.updateUserNick(user);
 								updateRemoteNick(nickString);
 							}
 						} else {

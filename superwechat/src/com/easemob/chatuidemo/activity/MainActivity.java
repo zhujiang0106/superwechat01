@@ -581,28 +581,7 @@ public class MainActivity extends BaseActivity implements EMEventListener {
 			// 被删除
 			String currentUserName = SuperWeChatApplication.getInstance().getUserName();
 			for (final String username : usernameList) {
-				/*final OkHttpUtils2<Result> utils = new OkHttpUtils2<Result>();
-				utils.setRequestUrl(I.REQUEST_DELETE_CONTACT)
-						.addParam(I.Contact.USER_NAME,currentUserName)
-						.addParam(I.Contact.CU_NAME,username)
-						.targetClass(Result.class)
-						.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
-							@Override
-							public void onSuccess(Result result) {
-								((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().remove(username);
-								UserAvatar u = SuperWeChatApplication.getInstance().getUserMap().get(username);
-								SuperWeChatApplication.getInstance().getUserList().remove(u);
-								SuperWeChatApplication.getInstance().getUserMap().remove(username);
-								userDao.deleteContact(username);
-								inviteMessgeDao.deleteMessage(username);
-								sendStickyBroadcast(new Intent("update_contact_list"));
-							}
 
-							@Override
-							public void onError(String error) {
-
-							}
-						});*/
 			}
 			runOnUiThread(new Runnable() {
 				public void run() {

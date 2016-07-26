@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_group"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eee"
@@ -73,6 +74,7 @@
         android:textSize="18sp" />
 
     <LinearLayout
+        android:id="@+id/layout_group_icon"
         android:layout_width="match_parent"
         android:layout_height="46dp"
         android:layout_marginBottom="10dp"
@@ -81,6 +83,7 @@
         android:background="@drawable/button_normal_shape"
         >
         <TextView
+            android:id="@+id/tvAvatar"
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -20,6 +20,7 @@ import com.easemob.chatuidemo.bean.UserAvatar;
 import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.task.DownloadContactsListTask;
+import com.easemob.chatuidemo.task.DownloadGroupsListTask;
 import com.easemob.chatuidemo.utils.I;
 import com.easemob.chatuidemo.utils.Utils;
 
@@ -91,6 +92,7 @@ public class SplashActivity extends BaseActivity {
 						SuperWeChatApplication.currentUserNick = user.getMUserNick();
 					}
 					new DownloadContactsListTask(SplashActivity.this,userName).getContacts();
+					new DownloadGroupsListTask(SplashActivity.this,userName).getContacts();
 
 					long costTime = System.currentTimeMillis() - start;
 					//等待sleeptime时长

@@ -37,6 +37,7 @@ import com.easemob.chatuidemo.Constant;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.DemoHXSDKModel;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.SuperWeChatApplication;
 
 /**
  * 设置界面
@@ -356,6 +357,10 @@ public class SettingsFragment extends Fragment implements OnClickListener {
 			public void onSuccess() {
 				getActivity().runOnUiThread(new Runnable() {
 					public void run() {
+						SuperWeChatApplication.getInstance().setUser(null);
+						SuperWeChatApplication.getInstance().getUserMap().clear();
+						SuperWeChatApplication.getInstance().getUserList().clear();
+						SuperWeChatApplication.getInstance().getGroupList().clear();
 						pd.dismiss();
 						// 重新显示登陆页面
 						((MainActivity) getActivity()).finish();

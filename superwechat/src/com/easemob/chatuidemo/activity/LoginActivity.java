@@ -47,6 +47,7 @@ import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.db.UserDao;
 import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.task.DownloadContactsListTask;
+import com.easemob.chatuidemo.task.DownloadGroupsListTask;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.chatuidemo.utils.I;
 import com.easemob.chatuidemo.utils.UserUtils;
@@ -259,6 +260,7 @@ public class LoginActivity extends BaseActivity {
 		SuperWeChatApplication.currentUserNick = user.getMUserNick();
 
 		new DownloadContactsListTask(LoginActivity.this,currentUsername).getContacts();
+		new DownloadGroupsListTask(LoginActivity.this,currentUsername).getContacts();
 		try {
 			// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
 			// ** manually load all local groups and

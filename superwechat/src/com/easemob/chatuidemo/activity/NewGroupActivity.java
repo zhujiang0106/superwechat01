@@ -159,7 +159,7 @@ public class NewGroupActivity extends BaseActivity {
 		}
 	}
 
-	private void createAppGroup(String groupId, String groupName, String desc, String[] members) {
+	private void createAppGroup(final String groupId, String groupName, String desc, final String[] members) {
 		boolean isPublic = checkBox.isChecked();
 		boolean invites = !isPublic;
 		File file = new File(OnSetAvatarListener.getAvatarPath(NewGroupActivity.this, I.AVATAR_TYPE_GROUP_PATH), avatarName + I.AVATAR_SUFFIX_JPG);
@@ -179,6 +179,9 @@ public class NewGroupActivity extends BaseActivity {
 					public void onSuccess(String str) {
 						Result result = Utils.getResultFromJson(str, GroupAvatar.class);
 						if (result != null && result.isRetMsg()) {
+							if (members != null && members.length > 0) {
+								addGroupMembers(groupId, members);
+							}
 							runOnUiThread(new Runnable() {
 								public void run() {
 									progressDialog.dismiss();
@@ -192,6 +195,44 @@ public class NewGroupActivity extends BaseActivity {
 					@Override
 					public void onError(String error) {
 						progressDialog.dismiss();
+					}
+				});
+	}
+
+	private void addGroupMembers(String hxid, String[] members) {
+		String member = "";
+		for (String m : members) {
+			member += m + ",";
+		}
+		member = member.substring(0, member.length() - 1);
+		Log.i("main", "member="+member.toString());
+		final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
+		utils.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBERS)
+				.addParam(I.Member.GROUP_HX_ID,hxid)
+				.addParam(I.Member.USER_NAME,member)
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String str) {
+						Result result = Utils.getResultFromJson(str, GroupAvatar.class);
+						if (result != null && result.isRetMsg()) {
+							runOnUiThread(new Runnable() {
+								public void run() {
+									progressDialog.dismiss();
+									setResult(RESULT_OK);
+									finish();
+								}
+							});
+						} else {
+							progressDialog.dismiss();
+							Toast.makeText(NewGroupActivity.this,"添加群组成员失败",Toast.LENGTH_SHORT).show();
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+						progressDialog.dismiss();
+						Toast.makeText(NewGroupActivity.this,"添加群组成员失败",Toast.LENGTH_SHORT).show();
 					}
 				});
 	}

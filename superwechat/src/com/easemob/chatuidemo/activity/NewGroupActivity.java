@@ -31,9 +31,16 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.SuperWeChatApplication;
+import com.easemob.chatuidemo.bean.GroupAvatar;
+import com.easemob.chatuidemo.bean.Result;
+import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.listener.OnSetAvatarListener;
 import com.easemob.chatuidemo.utils.I;
+import com.easemob.chatuidemo.utils.Utils;
 import com.easemob.exceptions.EaseMobException;
+
+import java.io.File;
 
 public class NewGroupActivity extends BaseActivity {
 	private EditText groupNameEditText;
@@ -101,7 +108,6 @@ public class NewGroupActivity extends BaseActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		String st1 = getResources().getString(R.string.Is_to_create_a_group_chat);
 		final String st2 = getResources().getString(R.string.Failed_to_create_groups);
 		if (resultCode != RESULT_OK) {
 			return;
@@ -112,11 +118,7 @@ public class NewGroupActivity extends BaseActivity {
 		Log.i("main", "requestCode=" + requestCode);
 		if (requestCode == CREATE_GROUP) {
 			//新建群组
-			progressDialog = new ProgressDialog(this);
-			progressDialog.setMessage(st1);
-			progressDialog.setCanceledOnTouchOutside(false);
-			progressDialog.show();
-
+			setProgressDialog();
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -135,6 +137,7 @@ public class NewGroupActivity extends BaseActivity {
 						    group = EMGroupManager.getInstance().createPrivateGroup(groupName, desc, members, memberCheckbox.isChecked(),200);
 						}
 						Log.i("main", "hxid=" + group.getGroupId());
+						createAppGroup(group.getGroupId(),groupName,desc,members);
 						runOnUiThread(new Runnable() {
 							public void run() {
 								progressDialog.dismiss();
@@ -154,6 +157,51 @@ public class NewGroupActivity extends BaseActivity {
 				}
 			}).start();
 		}
+	}
+
+	private void createAppGroup(String groupId, String groupName, String desc, String[] members) {
+		boolean isPublic = checkBox.isChecked();
+		boolean invites = !isPublic;
+		File file = new File(OnSetAvatarListener.getAvatarPath(NewGroupActivity.this, I.AVATAR_TYPE_GROUP_PATH), avatarName + I.AVATAR_SUFFIX_JPG);
+		String owner = SuperWeChatApplication.getInstance().getUserName();
+		final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
+		utils.setRequestUrl(I.REQUEST_CREATE_GROUP)
+				.addParam(I.Group.HX_ID,groupId)
+				.addParam(I.Group.NAME,groupName)
+				.addParam(I.Group.OWNER,owner)
+				.addParam(I.Group.DESCRIPTION,desc)
+				.addParam(I.Group.IS_PUBLIC,String.valueOf(isPublic))
+				.addParam(I.Group.ALLOW_INVITES,String.valueOf(invites))
+				.targetClass(String.class)
+				.addFile(file)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String str) {
+						Result result = Utils.getResultFromJson(str, GroupAvatar.class);
+						if (result != null && result.isRetMsg()) {
+							runOnUiThread(new Runnable() {
+								public void run() {
+									progressDialog.dismiss();
+									setResult(RESULT_OK);
+									finish();
+								}
+							});
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+						progressDialog.dismiss();
+					}
+				});
+	}
+
+	private void setProgressDialog() {
+		String st1 = getResources().getString(R.string.Is_to_create_a_group_chat);
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setMessage(st1);
+		progressDialog.setCanceledOnTouchOutside(false);
+		progressDialog.show();
 	}
 
 	public void back(View view) {

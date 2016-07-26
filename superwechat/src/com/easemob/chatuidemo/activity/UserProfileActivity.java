@@ -89,10 +89,12 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 			iconRightArrow.setVisibility(View.INVISIBLE);
 		}
 		if (username == null||username.equals(EMChatManager.getInstance().getCurrentUser())) {
-			String userName = SuperWeChatApplication.getInstance().getUserName();
+//			String userName = SuperWeChatApplication.getInstance().getUserName();
+			String userName = EMChatManager.getInstance().getCurrentUser();
 			tvUsername.setText(userName);
 			UserUtils.setAppCurrentUserNick(tvNickName);
-			UserUtils.setAppUserAvatar(this,userName,headAvatar);
+			UserUtils.setCurrentUserAvatar(this,headAvatar);
+//			UserUtils.setAppUserAvatar(this,userName,headAvatar);
 		} /*else if (username.equals(EMChatManager.getInstance().getCurrentUser())) {
 			String userName = SuperWeChatApplication.getInstance().getUserName();
 			tvUsername.setText(EMChatManager.getInstance().getCurrentUser());
@@ -283,11 +285,11 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 		}
 		mOnSetAvatarListener.setAvatar(requestCode,data,headAvatar);
 		if (requestCode == OnSetAvatarListener.REQUEST_CROP_PHOTO) {
-			uploadUserAvatar();
+			uploadUserAvatar(data);
 		}
 	}
 
-	private void uploadUserAvatar() {
+	private void uploadUserAvatar(final Intent data) {
 		File file = new File(OnSetAvatarListener.getAvatarPath(UserProfileActivity.this, I.AVATAR_TYPE_USER_PATH), avatarName + I.AVATAR_SUFFIX_JPG);
 		String userName = SuperWeChatApplication.getInstance().getUserName();
 		final OkHttpUtils2<Result> utils = new OkHttpUtils2<Result>();
@@ -299,8 +301,10 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 				.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
 					@Override
 					public void onSuccess(Result result) {
+						dialog.dismiss();
 						if (result.isRetMsg()) {
 							Toast.makeText(UserProfileActivity.this,"头像更新成功",Toast.LENGTH_LONG).show();
+							setPicToView(data);
 						} else {
 							Toast.makeText(UserProfileActivity.this, getString(R.string.toast_updatephoto_fail),
 									Toast.LENGTH_SHORT).show();

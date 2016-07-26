@@ -13,6 +13,7 @@
  */
 package com.easemob.chatuidemo.activity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -47,7 +49,11 @@ import com.easemob.chatuidemo.domain.User;
 import com.easemob.chatuidemo.task.DownloadContactsListTask;
 import com.easemob.chatuidemo.utils.CommonUtils;
 import com.easemob.chatuidemo.utils.I;
+import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.chatuidemo.utils.Utils;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 /**
  * 登陆页面
@@ -193,6 +199,7 @@ public class LoginActivity extends BaseActivity {
 							if (user != null) {
 								saveUser2DB(user);
 								loginSuccess(user);
+								downloadUserAvatar();
 							}
 						} else {
 							pd.dismiss();
@@ -206,6 +213,35 @@ public class LoginActivity extends BaseActivity {
 						pd.dismiss();
 						DemoHXSDKHelper.getInstance().logout(true,null);
 						Toast.makeText(getApplicationContext(), R.string.Login_failed, Toast.LENGTH_SHORT).show();
+					}
+				});
+	}
+
+	private void downloadUserAvatar() {
+		final OkHttpUtils2<Message> utils = new OkHttpUtils2<Message>();
+		utils.url(UserUtils.getUserAvatarPath(currentUsername))
+				.targetClass(Message.class)
+				.doInBackground(new Callback() {
+					@Override
+					public void onFailure(Request request, IOException e) {
+
+					}
+
+					@Override
+					public void onResponse(Response response) throws IOException {
+						byte[] data = response.body().bytes();
+						final String avatarUrl = ((DemoHXSDKHelper) HXSDKHelper.getInstance()).getUserProfileManager().uploadUserAvatar(data);
+					}
+				})
+				.execute(new OkHttpUtils2.OnCompleteListener<Message>() {
+					@Override
+					public void onSuccess(Message result) {
+
+					}
+
+					@Override
+					public void onError(String error) {
+
 					}
 				});
 	}

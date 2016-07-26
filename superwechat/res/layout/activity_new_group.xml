@@ -71,6 +71,36 @@
         android:paddingLeft="5dp"
         android:paddingTop="5dp"
         android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/button_normal_shape"
+        >
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dl_title_upload_photo"
+            android:textColor="#333"
+            android:layout_gravity="center_vertical"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@drawable/default_avatar"
+            android:layout_weight="0"/>
+
+    </LinearLayout>
     
     
     <LinearLayout 

@@ -188,6 +188,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		clearAllHistory.setOnClickListener(this);
 		blacklistLayout.setOnClickListener(this);
 		changeGroupNameLayout.setOnClickListener(this);
+		setUpdateMemberReceiver();
 
 	}
 
@@ -305,7 +306,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         List<String> members = new ArrayList<String>();
         members.addAll(group.getMembers());
         adapter.addAll(members);
-//		setUpdateMemberReceiver();
+
 		adapter.notifyDataSetChanged();
 
 	}
@@ -850,9 +851,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	protected void onDestroy() {
 		super.onDestroy();
 		instance = null;
-		/*if (mReceiver != null) {
+		if (mReceiver != null) {
 			unregisterReceiver(mReceiver);
-		}*/
+		}
 	}
 	
 	private static class ViewHolder{
@@ -898,7 +899,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		}
 	}
 
-	/*class UpdateMemberReceiver extends BroadcastReceiver {
+	class UpdateMemberReceiver extends BroadcastReceiver {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -911,5 +912,5 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 		mReceiver = new UpdateMemberReceiver();
 		IntentFilter filter = new IntentFilter("update_member_list");
 		registerReceiver(mReceiver, filter);
-	}*/
+	}
 }

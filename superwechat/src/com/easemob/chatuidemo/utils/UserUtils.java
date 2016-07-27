@@ -11,10 +11,13 @@ import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.SuperWeChatApplication;
 import com.easemob.chatuidemo.UserProfileManager;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.bean.MemberUserAvatar;
 import com.easemob.chatuidemo.bean.UserAvatar;
 import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.domain.User;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 public class UserUtils {
     /**
@@ -189,5 +192,28 @@ public class UserUtils {
             }
         }
     }
+    public static MemberUserAvatar getAppMemberInfo(String hxid,String username){
+        MemberUserAvatar member = null;
+        HashMap<String, MemberUserAvatar> memberMap = SuperWeChatApplication.getInstance().getMemberMap().get(hxid);
+        if (memberMap == null || memberMap.size() < 0) {
+            return null;
+        } else {
+            member = memberMap.get(username);
+        }
+        return member;
+    }
 
+
+    public static void setAppMemberNick(String hxid, String username, TextView view) {
+        MemberUserAvatar member = getAppMemberInfo(hxid, username);
+        setMemberNick(view, member);
+    }
+
+    private static void setMemberNick(TextView view, MemberUserAvatar member) {
+        if (member != null && member.getMUserNick() != null) {
+            view.setText(member.getMUserNick());
+        } else {
+            view.setText(member.getMUserName());
+        }
+    }
 }

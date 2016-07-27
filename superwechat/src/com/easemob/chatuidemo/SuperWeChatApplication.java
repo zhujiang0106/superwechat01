@@ -118,6 +118,7 @@ public class SuperWeChatApplication extends Application {
 	private UserAvatar user;
 	private ArrayList<UserAvatar> userList = new ArrayList<UserAvatar>();
 	private Map<String, UserAvatar> userMap = new HashMap<String, UserAvatar>();
+	private Map<String, GroupAvatar> groupMap = new HashMap<String, GroupAvatar>();
 
 	private Map<String, HashMap<String, MemberUserAvatar>> memberMap = new HashMap<String, HashMap<String, MemberUserAvatar>>();
 
@@ -161,5 +162,13 @@ public class SuperWeChatApplication extends Application {
 
 	public void setMemberMap(Map<String, HashMap<String, MemberUserAvatar>> memberMap) {
 		this.memberMap = memberMap;
+	}
+
+	public Map<String, GroupAvatar> getGroupMap() {
+		return groupMap;
+	}
+
+	public void setGroupMap(Map<String, GroupAvatar> groupMap) {
+		this.groupMap = groupMap;
 	}
 }

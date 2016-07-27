@@ -45,6 +45,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.SuperWeChatApplication;
 import com.easemob.chatuidemo.bean.GroupAvatar;
 import com.easemob.chatuidemo.bean.Result;
 import com.easemob.chatuidemo.data.OkHttpUtils2;
@@ -706,6 +707,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							}
 							EMLog.d("group", "remove user from group:" + username);
 							deleteMembersFromGroup(username);
+							deleteMembersFromAppGroup(username);
 						} else {
 							// 正常情况下点击user，可以进入用户详情或者聊天页面等等
 							// startActivity(new
@@ -776,6 +778,37 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				});
 			}
 			return convertView;
+		}
+
+		private void deleteMembersFromAppGroup(final String username) {
+			GroupAvatar ga = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+			Log.i("main", ga.toString()+"就是你");
+			if (ga != null) {
+				Log.i("main", "11111进入");
+				final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
+				utils.setRequestUrl(I.REQUEST_DELETE_GROUP_MEMBER)
+						.addParam(I.Member.GROUP_ID,String.valueOf(ga.getMGroupId()))
+						.addParam(I.Member.USER_NAME,username)
+						.targetClass(String.class)
+						.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+							@Override
+							public void onSuccess(String str) {
+								Result result = Utils.getResultFromJson(str, GroupAvatar.class);
+								if (result != null && result.isRetMsg()) {
+									SuperWeChatApplication.getInstance().getMemberMap().get(groupId).remove(username);
+								}
+							}
+
+							@Override
+							public void onError(String error) {
+								Toast.makeText(GroupDetailsActivity.this,"删除成员失败",Toast.LENGTH_SHORT).show();
+							}
+						});
+			} else {
+				Log.i("main", "22222进入");
+				finish();
+				return;
+			}
 		}
 
 		@Override

@@ -17,11 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,7 +45,13 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.bean.GroupAvatar;
+import com.easemob.chatuidemo.bean.Result;
+import com.easemob.chatuidemo.data.OkHttpUtils2;
+import com.easemob.chatuidemo.task.DownloadMemberMapTask;
+import com.easemob.chatuidemo.utils.I;
 import com.easemob.chatuidemo.utils.UserUtils;
+import com.easemob.chatuidemo.utils.Utils;
 import com.easemob.chatuidemo.widget.ExpandGridView;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.EMLog;
@@ -295,10 +304,11 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         List<String> members = new ArrayList<String>();
         members.addAll(group.getMembers());
         adapter.addAll(members);
-        
-        adapter.notifyDataSetChanged();
+//		setUpdateMemberReceiver();
+		adapter.notifyDataSetChanged();
+
 	}
-	
+
 	/**
 	 * 点击退出群组按钮
 	 * 
@@ -425,12 +435,52 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), st6 + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), st6 + e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
 			}
 		}).start();
+		addGroupMembers(st6,groupId, newmembers);
+	}
+
+	private void addGroupMembers(final String str, String hxid, String[] members) {
+		String member = "";
+		for (String m : members) {
+			member += m + ",";
+		}
+		member = member.substring(0, member.length() - 1);
+		Log.i("main", "member="+member.toString());
+		final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
+		utils.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBERS)
+				.addParam(I.Member.GROUP_HX_ID,hxid)
+				.addParam(I.Member.USER_NAME,member)
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String str) {
+						Result result = Utils.getResultFromJson(str, GroupAvatar.class);
+						if (result != null && result.isRetMsg()) {
+							new DownloadMemberMapTask(getApplicationContext(),groupId).getMembers();
+							runOnUiThread(new Runnable() {
+								public void run() {
+									progressDialog.dismiss();
+									setResult(RESULT_OK);
+									finish();
+								}
+							});
+						} else {
+							progressDialog.dismiss();
+							Toast.makeText(getApplicationContext(),str,Toast.LENGTH_SHORT).show();
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+						progressDialog.dismiss();
+						Toast.makeText(getApplicationContext(),str+error,Toast.LENGTH_SHORT).show();
+					}
+				});
 	}
 
 	@Override
@@ -796,6 +846,9 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	protected void onDestroy() {
 		super.onDestroy();
 		instance = null;
+		/*if (mReceiver != null) {
+			unregisterReceiver(mReceiver);
+		}*/
 	}
 	
 	private static class ViewHolder{
@@ -804,4 +857,18 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	    ImageView badgeDeleteView;
 	}
 
+	/*class UpdateMemberReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			refreshMembers();
+		}
+	}
+
+	UpdateMemberReceiver mReceiver;
+	private void setUpdateMemberReceiver() {
+		mReceiver = new UpdateMemberReceiver();
+		IntentFilter filter = new IntentFilter("update_member_list");
+		registerReceiver(mReceiver, filter);
+	}*/
 }

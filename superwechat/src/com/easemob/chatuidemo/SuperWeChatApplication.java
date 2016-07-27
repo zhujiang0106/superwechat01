@@ -18,6 +18,7 @@ import android.content.Context;
 
 import com.easemob.EMCallBack;
 import com.easemob.chatuidemo.bean.GroupAvatar;
+import com.easemob.chatuidemo.bean.MemberUserAvatar;
 import com.easemob.chatuidemo.bean.UserAvatar;
 
 import java.util.ArrayList;
@@ -118,6 +119,8 @@ public class SuperWeChatApplication extends Application {
 	private ArrayList<UserAvatar> userList = new ArrayList<UserAvatar>();
 	private Map<String, UserAvatar> userMap = new HashMap<String, UserAvatar>();
 
+	private Map<String, HashMap<String, MemberUserAvatar>> memberMap = new HashMap<String, HashMap<String, MemberUserAvatar>>();
+
 	private ArrayList<GroupAvatar> groupList = new ArrayList<GroupAvatar>();
 
 	public ArrayList<GroupAvatar> getGroupList() {
@@ -150,5 +153,13 @@ public class SuperWeChatApplication extends Application {
 
 	public void setUserList(ArrayList<UserAvatar> userList) {
 		this.userList = userList;
+	}
+
+	public Map<String, HashMap<String, MemberUserAvatar>> getMemberMap() {
+		return memberMap;
+	}
+
+	public void setMemberMap(Map<String, HashMap<String, MemberUserAvatar>> memberMap) {
+		this.memberMap = memberMap;
 	}
 }

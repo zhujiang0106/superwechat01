@@ -401,12 +401,43 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 					runOnUiThread(new Runnable() {
 						public void run() {
 							progressDialog.dismiss();
-							Toast.makeText(getApplicationContext(), st5 + e.getMessage(), 1).show();
+							Toast.makeText(getApplicationContext(), st5 + e.getMessage(), Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
 			}
 		}).start();
+		deleteAppGroup(groupId);
+	}
+
+	private void deleteAppGroup(final String hxid) {
+		GroupAvatar ga = SuperWeChatApplication.getInstance().getGroupMap().get(hxid);
+		if (ga != null) {
+			Log.i("main", "11111解除进入");
+			final OkHttpUtils2<Result> utils = new OkHttpUtils2<Result>();
+			utils.setRequestUrl(I.REQUEST_DELETE_GROUP)
+					.addParam(I.Group.GROUP_ID,String.valueOf(ga.getMGroupId()))
+					.targetClass(Result.class)
+					.execute(new OkHttpUtils2.OnCompleteListener<Result>() {
+						@Override
+						public void onSuccess(Result result) {
+							if (result != null && result.isRetMsg()) {
+								GroupAvatar group = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+								SuperWeChatApplication.getInstance().getGroupList().remove(group);
+								SuperWeChatApplication.getInstance().getGroupMap().remove(groupId);
+							}
+						}
+
+						@Override
+						public void onError(String error) {
+							Toast.makeText(GroupDetailsActivity.this,"解除群组失败",Toast.LENGTH_SHORT).show();
+						}
+					});
+		} else {
+			Log.i("main", "22222解除进入");
+			finish();
+			return;
+		}
 	}
 
 	/**

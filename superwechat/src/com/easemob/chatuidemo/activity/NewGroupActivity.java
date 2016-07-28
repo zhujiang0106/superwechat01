@@ -178,17 +178,13 @@ public class NewGroupActivity extends BaseActivity {
 					@Override
 					public void onSuccess(String str) {
 						Result result = Utils.getResultFromJson(str, GroupAvatar.class);
+						GroupAvatar group = (GroupAvatar) result.getRetData();
 						if (result != null && result.isRetMsg()) {
 							if (members != null && members.length > 0) {
-								addGroupMembers(groupId, members);
+								addGroupMembers(groupId, members,group);
+							} else {
+								createGroupSuccess(group);
 							}
-							runOnUiThread(new Runnable() {
-								public void run() {
-									progressDialog.dismiss();
-									setResult(RESULT_OK);
-									finish();
-								}
-							});
 						}
 					}
 
@@ -199,7 +195,19 @@ public class NewGroupActivity extends BaseActivity {
 				});
 	}
 
-	private void addGroupMembers(String hxid, String[] members) {
+	private void createGroupSuccess(GroupAvatar group) {
+		SuperWeChatApplication.getInstance().getGroupMap().put(group.getMGroupHxid(), group);
+		SuperWeChatApplication.getInstance().getGroupList().add(group);
+		runOnUiThread(new Runnable() {
+            public void run() {
+                progressDialog.dismiss();
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+	}
+
+	private void addGroupMembers(String hxid, String[] members, final GroupAvatar group) {
 		String member = "";
 		for (String m : members) {
 			member += m + ",";
@@ -216,13 +224,7 @@ public class NewGroupActivity extends BaseActivity {
 					public void onSuccess(String str) {
 						Result result = Utils.getResultFromJson(str, GroupAvatar.class);
 						if (result != null && result.isRetMsg()) {
-							runOnUiThread(new Runnable() {
-								public void run() {
-									progressDialog.dismiss();
-									setResult(RESULT_OK);
-									finish();
-								}
-							});
+							createGroupSuccess(group);
 						} else {
 							progressDialog.dismiss();
 							Toast.makeText(NewGroupActivity.this,"添加群组成员失败",Toast.LENGTH_SHORT).show();

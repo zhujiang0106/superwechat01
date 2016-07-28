@@ -48,6 +48,7 @@ import com.easemob.chat.EMCursorResult;
 import com.easemob.chat.EMGroupInfo;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.SuperWeChatApplication;
 import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.exceptions.EaseMobException;
 import com.easemob.util.NetUtils;
@@ -141,7 +142,11 @@ public class PublicGroupsActivity extends BaseActivity {
 
                         public void run() {
                             searchBtn.setVisibility(View.VISIBLE);
-                            groupsList.addAll(returnGroups);
+                            for (EMGroupInfo ga : returnGroups) {
+                                if (!SuperWeChatApplication.getInstance().getGroupMap().containsKey(ga.getGroupId())) {
+                                    groupsList.add(ga);
+                                }
+                            }
                             if(returnGroups.size() != 0){
                                 //获取cursor
                                 cursor = result.getCursor();

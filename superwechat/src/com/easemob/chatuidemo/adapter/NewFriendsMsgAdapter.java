@@ -34,12 +34,14 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.chatuidemo.DemoHXSDKHelper;
 import com.easemob.chatuidemo.R;
+import com.easemob.chatuidemo.bean.GroupAvatar;
 import com.easemob.chatuidemo.bean.Result;
 import com.easemob.chatuidemo.bean.UserAvatar;
 import com.easemob.chatuidemo.data.OkHttpUtils2;
 import com.easemob.chatuidemo.db.InviteMessgeDao;
 import com.easemob.chatuidemo.domain.InviteMessage;
 import com.easemob.chatuidemo.domain.InviteMessage.InviteMesageStatus;
+import com.easemob.chatuidemo.task.DownloadMemberMapTask;
 import com.easemob.chatuidemo.utils.I;
 import com.easemob.chatuidemo.utils.UserUtils;
 import com.easemob.chatuidemo.utils.Utils;
@@ -182,8 +184,10 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 				try {
 					if(msg.getGroupId() == null) //同意好友请求
 						EMChatManager.getInstance().acceptInvitation(msg.getFrom());
-					else //同意加群申请
-					    EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
+					else {//同意加群申请
+						EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
+						addMember2Group(msg.getFrom(),msg.getGroupId());
+					}
 					((Activity) context).runOnUiThread(new Runnable() {
 
 						@Override
@@ -213,6 +217,28 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 				}
 			}
 		}).start();
+	}
+
+	private void addMember2Group(String username, final String hxid) {
+		final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
+		utils.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBER)
+				.addParam(I.Member.GROUP_HX_ID,hxid)
+				.addParam(I.Member.USER_NAME,username)
+				.targetClass(String.class)
+				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+					@Override
+					public void onSuccess(String str) {
+						Result result = Utils.getResultFromJson(str, GroupAvatar.class);
+						if (result != null && result.isRetMsg()) {
+							new DownloadMemberMapTask(context, hxid);
+						}
+					}
+
+					@Override
+					public void onError(String error) {
+
+					}
+				});
 	}
 
 	private static class ViewHolder {

@@ -266,6 +266,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							}
 						}
 					}).start();
+					updateAppGroupName(returnData);
 				}
 				break;
 			case REQUEST_CODE_ADD_TO_BALCKLIST:
@@ -297,6 +298,38 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 			default:
 				break;
 			}
+		}
+	}
+
+	private void updateAppGroupName(String newGroupName) {
+		final GroupAvatar ga = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+		if (ga != null) {
+			Log.i("main", "11111解除进入");
+			final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
+			utils.setRequestUrl(I.REQUEST_UPDATE_GROUP_NAME)
+					.addParam(I.Group.GROUP_ID,String.valueOf(ga.getMGroupId()))
+					.addParam(I.Group.NAME,newGroupName)
+					.targetClass(String.class)
+					.execute(new OkHttpUtils2.OnCompleteListener<String>() {
+						@Override
+						public void onSuccess(String str) {
+							Result result = Utils.getResultFromJson(str, GroupAvatar.class);
+							if (result != null && result.isRetMsg()) {
+								GroupAvatar group = (GroupAvatar) result.getRetData();
+								SuperWeChatApplication.getInstance().getGroupMap().put(groupId,group);
+								SuperWeChatApplication.getInstance().getGroupList().add(group);
+							}
+						}
+
+						@Override
+						public void onError(String error) {
+							Toast.makeText(GroupDetailsActivity.this,"修改群组名字失败",Toast.LENGTH_SHORT).show();
+						}
+					});
+		} else {
+			Log.i("main", "22222解除进入");
+			finish();
+			return;
 		}
 	}
 
@@ -411,7 +444,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	}
 
 	private void deleteAppGroup(final String hxid) {
-		GroupAvatar ga = SuperWeChatApplication.getInstance().getGroupMap().get(hxid);
+		final GroupAvatar ga = SuperWeChatApplication.getInstance().getGroupMap().get(hxid);
 		if (ga != null) {
 			Log.i("main", "11111解除进入");
 			final OkHttpUtils2<Result> utils = new OkHttpUtils2<Result>();
@@ -422,8 +455,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						@Override
 						public void onSuccess(Result result) {
 							if (result != null && result.isRetMsg()) {
-								GroupAvatar group = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
-								SuperWeChatApplication.getInstance().getGroupList().remove(group);
+								SuperWeChatApplication.getInstance().getGroupList().remove(ga);
 								SuperWeChatApplication.getInstance().getGroupMap().remove(groupId);
 							}
 						}

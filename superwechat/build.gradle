@@ -19,7 +19,9 @@ dependencies {
 android {
     compileSdkVersion 19
     buildToolsVersion "23.0.3"
-
+    defaultConfig{
+        applicationId "com.easemob.fulicenter"
+    }
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -42,5 +44,9 @@ android {
         // by a similar customization.
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
+    }
+    lintOptions{
+        checkReleaseBuilds false
+        abortOnError false
     }
 }

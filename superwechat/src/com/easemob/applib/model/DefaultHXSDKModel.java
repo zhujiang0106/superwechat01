@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.easemob.applib.utils.HXPreferenceUtils;
-import com.easemob.chatuidemo.db.UserDao;
+import com.easemob.fulicenter.db.UserDao;
 
 import android.content.Context;
 import android.content.SharedPreferences;

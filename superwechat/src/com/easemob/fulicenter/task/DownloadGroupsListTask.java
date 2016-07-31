@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.easemob.fulicenter.SuperWeChatApplication;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.bean.GroupAvatar;
 import com.easemob.fulicenter.bean.Result;
 import com.easemob.fulicenter.data.OkHttpUtils2;
@@ -36,10 +36,10 @@ public class DownloadGroupsListTask {
                         Result result = Utils.getListResultFromJson(str, GroupAvatar.class);
                         ArrayList<GroupAvatar> list = (ArrayList<GroupAvatar>) result.getRetData();
                         if (list != null && list.size() > 0) {
-                            SuperWeChatApplication.getInstance().setGroupList(list);
+                            FuliCenterApplication.getInstance().setGroupList(list);
                             mContext.sendStickyBroadcast(new Intent("update_group_list"));
                             for (GroupAvatar g : list) {
-                                SuperWeChatApplication.getInstance().getGroupMap().put(g.getMGroupHxid(), g);
+                                FuliCenterApplication.getInstance().getGroupMap().put(g.getMGroupHxid(), g);
                             }
                         }
                     }

@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.fulicenter.DemoHXSDKHelper;
-import com.easemob.fulicenter.SuperWeChatApplication;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.bean.MemberUserAvatar;
 import com.easemob.fulicenter.bean.UserAvatar;
@@ -36,7 +36,7 @@ public class UserUtils {
         return user;
     }
     public static UserAvatar getAppUserInfo(String username){
-        UserAvatar user = SuperWeChatApplication.getInstance().getUserMap().get(username);
+        UserAvatar user = FuliCenterApplication.getInstance().getUserMap().get(username);
         if(user == null){
             user = new UserAvatar(username);
         }
@@ -116,7 +116,7 @@ public class UserUtils {
      * 设置当前用户头像
      */
     public static void setAppCurrentUserAvatar(Context context, ImageView imageView) {
-        String userName = SuperWeChatApplication.getInstance().getUserName();
+        String userName = FuliCenterApplication.getInstance().getUserName();
         setAppUserAvatar(context,userName,imageView);
     }
     
@@ -145,7 +145,7 @@ public class UserUtils {
      * 设置当前用户昵称
      */
     public static void setAppCurrentUserNick(TextView textView){
-        UserAvatar user = SuperWeChatApplication.getInstance().getUser();
+        UserAvatar user = FuliCenterApplication.getInstance().getUser();
         if (textView != null && user != null) {
             if (user.getMUserNick() != null) {
                 textView.setText(user.getMUserNick());
@@ -191,7 +191,7 @@ public class UserUtils {
     }
     public static MemberUserAvatar getAppMemberInfo(String hxid,String username){
         MemberUserAvatar member = null;
-        HashMap<String, MemberUserAvatar> memberMap = SuperWeChatApplication.getInstance().getMemberMap().get(hxid);
+        HashMap<String, MemberUserAvatar> memberMap = FuliCenterApplication.getInstance().getMemberMap().get(hxid);
         if (memberMap == null || memberMap.size() < 0) {
             return null;
         } else {

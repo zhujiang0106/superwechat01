@@ -89,7 +89,7 @@ import com.easemob.chat.NormalFileMessageBody;
 import com.easemob.chat.TextMessageBody;
 import com.easemob.chat.VideoMessageBody;
 import com.easemob.chat.VoiceMessageBody;
-import com.easemob.fulicenter.SuperWeChatApplication;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.DemoHXSDKHelper;
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.adapter.ExpressionAdapter;
@@ -861,7 +861,7 @@ public class ChatActivity extends BaseActivity implements OnClickListener, EMEve
 			return;
 		}
 
-		cameraFile = new File(PathUtil.getInstance().getImagePath(), SuperWeChatApplication.getInstance().getUserName()
+		cameraFile = new File(PathUtil.getInstance().getImagePath(), FuliCenterApplication.getInstance().getUserName()
 				+ System.currentTimeMillis() + ".jpg");
 		cameraFile.getParentFile().mkdirs();
 		startActivityForResult(

@@ -45,7 +45,7 @@ import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.fulicenter.R;
-import com.easemob.fulicenter.SuperWeChatApplication;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.bean.GroupAvatar;
 import com.easemob.fulicenter.bean.Result;
 import com.easemob.fulicenter.data.OkHttpUtils2;
@@ -302,7 +302,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	}
 
 	private void updateAppGroupName(String newGroupName) {
-		final GroupAvatar ga = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+		final GroupAvatar ga = FuliCenterApplication.getInstance().getGroupMap().get(groupId);
 		if (ga != null) {
 			Log.i("main", "11111解除进入");
 			final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
@@ -316,8 +316,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							Result result = Utils.getResultFromJson(str, GroupAvatar.class);
 							if (result != null && result.isRetMsg()) {
 								GroupAvatar group = (GroupAvatar) result.getRetData();
-								SuperWeChatApplication.getInstance().getGroupMap().put(groupId,group);
-								SuperWeChatApplication.getInstance().getGroupList().add(group);
+								FuliCenterApplication.getInstance().getGroupMap().put(groupId,group);
+								FuliCenterApplication.getInstance().getGroupList().add(group);
 							}
 						}
 
@@ -405,7 +405,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 				}
 			}
 		}).start();
-		deleteMembersFromAppGroup(SuperWeChatApplication.getInstance().getUserName(),true);
+		deleteMembersFromAppGroup(FuliCenterApplication.getInstance().getUserName(),true);
 
 	}
 
@@ -442,7 +442,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	}
 
 	private void deleteAppGroup(final String hxid) {
-		final GroupAvatar ga = SuperWeChatApplication.getInstance().getGroupMap().get(hxid);
+		final GroupAvatar ga = FuliCenterApplication.getInstance().getGroupMap().get(hxid);
 		if (ga != null) {
 			Log.i("main", "11111解除进入");
 			final OkHttpUtils2<Result> utils = new OkHttpUtils2<Result>();
@@ -453,8 +453,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 						@Override
 						public void onSuccess(Result result) {
 							if (result != null && result.isRetMsg()) {
-								SuperWeChatApplication.getInstance().getGroupList().remove(ga);
-								SuperWeChatApplication.getInstance().getGroupMap().remove(groupId);
+								FuliCenterApplication.getInstance().getGroupList().remove(ga);
+								FuliCenterApplication.getInstance().getGroupMap().remove(groupId);
 							}
 						}
 
@@ -924,7 +924,7 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 	}
 
 	private void deleteMembersFromAppGroup(final String username, final boolean isExit) {
-		GroupAvatar ga = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
+		GroupAvatar ga = FuliCenterApplication.getInstance().getGroupMap().get(groupId);
 		Log.i("main", ga.toString()+"就是你");
 		if (ga != null) {
 			Log.i("main", "11111进入");
@@ -939,11 +939,11 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
 							Result result = Utils.getResultFromJson(str, GroupAvatar.class);
 							if (result != null && result.isRetMsg()) {
 								if (isExit) {
-									GroupAvatar group = SuperWeChatApplication.getInstance().getGroupMap().get(groupId);
-									SuperWeChatApplication.getInstance().getGroupList().remove(group);
-									SuperWeChatApplication.getInstance().getGroupMap().remove(groupId);
+									GroupAvatar group = FuliCenterApplication.getInstance().getGroupMap().get(groupId);
+									FuliCenterApplication.getInstance().getGroupList().remove(group);
+									FuliCenterApplication.getInstance().getGroupMap().remove(groupId);
 								} else {
-									SuperWeChatApplication.getInstance().getMemberMap().get(groupId).remove(username);
+									FuliCenterApplication.getInstance().getMemberMap().get(groupId).remove(username);
 								}
 							}
 						}

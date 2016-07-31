@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.easemob.fulicenter.SuperWeChatApplication;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.bean.MemberUserAvatar;
 import com.easemob.fulicenter.bean.Result;
 import com.easemob.fulicenter.data.OkHttpUtils2;
@@ -38,7 +38,7 @@ public class DownloadMemberMapTask {
                         Result result = Utils.getListResultFromJson(str, MemberUserAvatar.class);
                         ArrayList<MemberUserAvatar> list = (ArrayList<MemberUserAvatar>) result.getRetData();
                         if (list != null && list.size() > 0) {
-                            Map<String, HashMap<String, MemberUserAvatar>> memberMap = SuperWeChatApplication.getInstance().getMemberMap();
+                            Map<String, HashMap<String, MemberUserAvatar>> memberMap = FuliCenterApplication.getInstance().getMemberMap();
                             if (!memberMap.containsKey(hxid)) {
                                 memberMap.put(hxid, new HashMap<String, MemberUserAvatar>());
                             }

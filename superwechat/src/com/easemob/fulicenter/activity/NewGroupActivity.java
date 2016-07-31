@@ -30,7 +30,7 @@ import android.widget.Toast;
 import com.easemob.chat.EMGroup;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.fulicenter.R;
-import com.easemob.fulicenter.SuperWeChatApplication;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.bean.GroupAvatar;
 import com.easemob.fulicenter.bean.Result;
 import com.easemob.fulicenter.data.OkHttpUtils2;
@@ -162,7 +162,7 @@ public class NewGroupActivity extends BaseActivity {
 		boolean isPublic = checkBox.isChecked();
 		boolean invites = !isPublic;
 		File file = new File(OnSetAvatarListener.getAvatarPath(NewGroupActivity.this, I.AVATAR_TYPE_GROUP_PATH), avatarName + I.AVATAR_SUFFIX_JPG);
-		String owner = SuperWeChatApplication.getInstance().getUserName();
+		String owner = FuliCenterApplication.getInstance().getUserName();
 		final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
 		utils.setRequestUrl(I.REQUEST_CREATE_GROUP)
 				.addParam(I.Group.HX_ID,groupId)
@@ -195,8 +195,8 @@ public class NewGroupActivity extends BaseActivity {
 	}
 
 	private void createGroupSuccess(GroupAvatar group) {
-		SuperWeChatApplication.getInstance().getGroupMap().put(group.getMGroupHxid(), group);
-		SuperWeChatApplication.getInstance().getGroupList().add(group);
+		FuliCenterApplication.getInstance().getGroupMap().put(group.getMGroupHxid(), group);
+		FuliCenterApplication.getInstance().getGroupList().add(group);
 		runOnUiThread(new Runnable() {
             public void run() {
                 progressDialog.dismiss();

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.easemob.fulicenter.SuperWeChatApplication;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.bean.Result;
 import com.easemob.fulicenter.bean.UserAvatar;
 import com.easemob.fulicenter.data.OkHttpUtils2;
@@ -37,9 +37,9 @@ public class DownloadContactsListTask {
                         Result result = Utils.getListResultFromJson(str, UserAvatar.class);
                         ArrayList<UserAvatar> list = (ArrayList<UserAvatar>) result.getRetData();
                         if (list != null && list.size() > 0) {
-                            SuperWeChatApplication.getInstance().setUserList(list);
+                            FuliCenterApplication.getInstance().setUserList(list);
                             mContext.sendStickyBroadcast(new Intent("update_contact_list"));
-                            Map<String, UserAvatar> userMap = SuperWeChatApplication.getInstance().getUserMap();
+                            Map<String, UserAvatar> userMap = FuliCenterApplication.getInstance().getUserMap();
                             for (UserAvatar u : list) {
                                 Log.i("main", u.getMUserName());
                                 userMap.put(u.getMUserName(), u);

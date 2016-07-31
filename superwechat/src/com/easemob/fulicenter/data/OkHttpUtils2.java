@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.easemob.fulicenter.SuperWeChatApplication;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.utils.I;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Call;
@@ -102,7 +102,7 @@ public class OkHttpUtils2<T> {
 
     /**初始化mHandler*/
     private void initHandler() {
-        mHandler = new Handler(SuperWeChatApplication.applicationContext.getMainLooper()) {
+        mHandler = new Handler(FuliCenterApplication.applicationContext.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {

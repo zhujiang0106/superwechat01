@@ -57,7 +57,7 @@ import com.easemob.chat.EMContactManager;
 import com.easemob.fulicenter.Constant;
 import com.easemob.fulicenter.DemoHXSDKHelper;
 import com.easemob.fulicenter.R;
-import com.easemob.fulicenter.SuperWeChatApplication;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.adapter.ContactAdapter;
 import com.easemob.fulicenter.bean.Result;
 import com.easemob.fulicenter.bean.UserAvatar;
@@ -367,7 +367,7 @@ public class ContactlistFragment extends Fragment {
 
 			}
 		}).start();
-		String currentUserName = SuperWeChatApplication.getInstance().getUserName();
+		String currentUserName = FuliCenterApplication.getInstance().getUserName();
 		final OkHttpUtils2<Result> utils = new OkHttpUtils2<Result>();
 		utils.setRequestUrl(I.REQUEST_DELETE_CONTACT)
 				.addParam(I.Contact.USER_NAME,currentUserName)
@@ -377,9 +377,9 @@ public class ContactlistFragment extends Fragment {
 					@Override
 					public void onSuccess(Result result) {
 						((DemoHXSDKHelper)HXSDKHelper.getInstance()).getContactList().remove(tobeDeleteUser.getUsername());
-						UserAvatar u = SuperWeChatApplication.getInstance().getUserMap().get(tobeDeleteUser.getUsername());
-						SuperWeChatApplication.getInstance().getUserList().remove(u);
-						SuperWeChatApplication.getInstance().getUserMap().remove(tobeDeleteUser.getUsername());
+						UserAvatar u = FuliCenterApplication.getInstance().getUserMap().get(tobeDeleteUser.getUsername());
+						FuliCenterApplication.getInstance().getUserList().remove(u);
+						FuliCenterApplication.getInstance().getUserMap().remove(tobeDeleteUser.getUsername());
 						userDao = new UserDao(getActivity());
 						inviteMessgeDao = new InviteMessgeDao(getActivity());
 						userDao.deleteContact(tobeDeleteUser.getUsername());

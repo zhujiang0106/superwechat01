@@ -28,7 +28,7 @@ import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.chat.EMChatManager;
 import com.easemob.fulicenter.DemoHXSDKHelper;
 import com.easemob.fulicenter.R;
-import com.easemob.fulicenter.SuperWeChatApplication;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.bean.Result;
 import com.easemob.fulicenter.bean.UserAvatar;
 import com.easemob.fulicenter.data.OkHttpUtils2;
@@ -144,7 +144,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 	private void updateUserNick(final String nickString) {
 		final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
 		utils.setRequestUrl(I.REQUEST_UPDATE_USER_NICK)
-				.addParam(I.User.USER_NAME,SuperWeChatApplication.getInstance().getUserName())
+				.addParam(I.User.USER_NAME, FuliCenterApplication.getInstance().getUserName())
 				.addParam(I.User.NICK,nickString)
 				.targetClass(String.class)
 				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
@@ -154,8 +154,8 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 						if (result != null & result.isRetMsg()) {
 							UserAvatar user = (UserAvatar) result.getRetData();
 							if (user != null) {
-								SuperWeChatApplication.getInstance().setUser(user);
-								SuperWeChatApplication.currentUserNick = user.getMUserNick();
+								FuliCenterApplication.getInstance().setUser(user);
+								FuliCenterApplication.currentUserNick = user.getMUserNick();
 								UserDao dao = new UserDao(UserProfileActivity.this);
 								dao.updateUserNick(user);
 								updateRemoteNick(nickString);
@@ -290,7 +290,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 
 	private void uploadUserAvatar(final Intent data) {
 		File file = new File(OnSetAvatarListener.getAvatarPath(UserProfileActivity.this, I.AVATAR_TYPE_USER_PATH), avatarName + I.AVATAR_SUFFIX_JPG);
-		String userName = SuperWeChatApplication.getInstance().getUserName();
+		String userName = FuliCenterApplication.getInstance().getUserName();
 		final OkHttpUtils2<Result> utils = new OkHttpUtils2<Result>();
 		utils.setRequestUrl(I.REQUEST_UPLOAD_AVATAR)
 				.addParam(I.NAME_OR_HXID,userName)

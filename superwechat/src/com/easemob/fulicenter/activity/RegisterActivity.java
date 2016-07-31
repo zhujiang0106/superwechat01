@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
-import com.easemob.fulicenter.SuperWeChatApplication;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.bean.Result;
 import com.easemob.fulicenter.data.OkHttpUtils2;
@@ -195,7 +195,7 @@ public class RegisterActivity extends BaseActivity {
 							if (!RegisterActivity.this.isFinishing())
 								pd.dismiss();
 							// 保存用户名
-							SuperWeChatApplication.getInstance().setUserName(username);
+							FuliCenterApplication.getInstance().setUserName(username);
 							Toast.makeText(getApplicationContext(), getResources().getString(R.string.Registered_successfully), Toast.LENGTH_SHORT).show();
 							finish();
 						}

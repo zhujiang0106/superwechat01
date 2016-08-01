@@ -17,11 +17,11 @@ public class CartBean implements Serializable {
      */
 
     private int id;
-    private int userName;
+    private String userName;
     private int goodsId;
     private int count;
     private boolean checked;
-    private String goods;
+    private GoodDetailsBean goods;
 
     public int getId() {
         return id;
@@ -31,11 +31,11 @@ public class CartBean implements Serializable {
         this.id = id;
     }
 
-    public int getUserName() {
+    public String getUserName() {
         return userName;
     }
 
-    public void setUserName(int userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
@@ -63,11 +63,11 @@ public class CartBean implements Serializable {
         this.checked = checked;
     }
 
-    public String getGoods() {
+    public GoodDetailsBean getGoods() {
         return goods;
     }
 
-    public void setGoods(String goods) {
+    public void setGoods(GoodDetailsBean goods) {
         this.goods = goods;
     }
 

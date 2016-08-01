@@ -68,29 +68,6 @@ public class UserUtils {
             Picasso.with(context).load(R.drawable.default_avatar).into(imageView);
         }
     }
-    /**
-     * 设置群组头像
-     * @param hxid
-     */
-    public static void setAppGroupAvatar(Context context, String hxid, ImageView imageView){
-        String path = "";
-        if(path != null && hxid != null){
-            path = getGroupAvatarPath(hxid);
-            Picasso.with(context).load(path).placeholder(R.drawable.default_avatar).into(imageView);
-        }else{
-            Picasso.with(context).load(R.drawable.default_avatar).into(imageView);
-        }
-    }
-
-    public static String getGroupAvatarPath(String hxid) {
-        StringBuilder path = new StringBuilder(I.SERVER_TOOL);
-        path.append(I.QUESTION).append(I.KEY_REQUEST)
-                .append(I.EQUALS).append(I.REQUEST_DOWNLOAD_AVATAR)
-                .append(I.AND).append(I.NAME_OR_HXID).append(I.EQUALS)
-                .append(hxid).append(I.AND).append(I.AVATAR_TYPE)
-                .append(I.EQUALS).append(I.AVATAR_TYPE_GROUP_PATH);
-        return path.toString();
-    }
     public static String getUserAvatarPath(String username) {
         StringBuilder path = new StringBuilder(I.SERVER_TOOL);
         path.append(I.QUESTION).append(I.KEY_REQUEST)
@@ -189,21 +166,10 @@ public class UserUtils {
             }
         }
     }
-    public static MemberUserAvatar getAppMemberInfo(String hxid,String username){
-        MemberUserAvatar member = null;
-        HashMap<String, MemberUserAvatar> memberMap = FuliCenterApplication.getInstance().getMemberMap().get(hxid);
-        if (memberMap == null || memberMap.size() < 0) {
-            return null;
-        } else {
-            member = memberMap.get(username);
-        }
-        return member;
-    }
-
 
     public static void setAppMemberNick(String hxid, String username, TextView view) {
-        MemberUserAvatar member = getAppMemberInfo(hxid, username);
-        setMemberNick(view, member);
+//        MemberUserAvatar member = getAppMemberInfo(hxid, username);
+//        setMemberNick(view, member);
     }
 
     private static void setMemberNick(TextView view, MemberUserAvatar member) {

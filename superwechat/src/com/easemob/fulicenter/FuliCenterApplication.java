@@ -17,8 +17,6 @@ import android.app.Application;
 import android.content.Context;
 
 import com.easemob.EMCallBack;
-import com.easemob.fulicenter.bean.GroupAvatar;
-import com.easemob.fulicenter.bean.MemberUserAvatar;
 import com.easemob.fulicenter.bean.UserAvatar;
 
 import java.util.ArrayList;
@@ -118,19 +116,6 @@ public class FuliCenterApplication extends Application {
 	private UserAvatar user;
 	private ArrayList<UserAvatar> userList = new ArrayList<UserAvatar>();
 	private Map<String, UserAvatar> userMap = new HashMap<String, UserAvatar>();
-	private Map<String, GroupAvatar> groupMap = new HashMap<String, GroupAvatar>();
-
-	private Map<String, HashMap<String, MemberUserAvatar>> memberMap = new HashMap<String, HashMap<String, MemberUserAvatar>>();
-
-	private ArrayList<GroupAvatar> groupList = new ArrayList<GroupAvatar>();
-
-	public ArrayList<GroupAvatar> getGroupList() {
-		return groupList;
-	}
-
-	public void setGroupList(ArrayList<GroupAvatar> groupList) {
-		this.groupList = groupList;
-	}
 
 	public Map<String, UserAvatar> getUserMap() {
 		return userMap;
@@ -156,19 +141,4 @@ public class FuliCenterApplication extends Application {
 		this.userList = userList;
 	}
 
-	public Map<String, HashMap<String, MemberUserAvatar>> getMemberMap() {
-		return memberMap;
-	}
-
-	public void setMemberMap(Map<String, HashMap<String, MemberUserAvatar>> memberMap) {
-		this.memberMap = memberMap;
-	}
-
-	public Map<String, GroupAvatar> getGroupMap() {
-		return groupMap;
-	}
-
-	public void setGroupMap(Map<String, GroupAvatar> groupMap) {
-		this.groupMap = groupMap;
-	}
 }

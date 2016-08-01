@@ -33,14 +33,12 @@ import android.widget.Toast;
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
 import com.easemob.fulicenter.R;
-import com.easemob.fulicenter.bean.GroupAvatar;
 import com.easemob.fulicenter.bean.Result;
 import com.easemob.fulicenter.bean.UserAvatar;
 import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.db.InviteMessgeDao;
 import com.easemob.fulicenter.domain.InviteMessage;
 import com.easemob.fulicenter.domain.InviteMessage.InviteMesageStatus;
-import com.easemob.fulicenter.task.DownloadMemberMapTask;
 import com.easemob.fulicenter.utils.I;
 import com.easemob.fulicenter.utils.UserUtils;
 import com.easemob.fulicenter.utils.Utils;
@@ -185,7 +183,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 						EMChatManager.getInstance().acceptInvitation(msg.getFrom());
 					else {//同意加群申请
 						EMGroupManager.getInstance().acceptApplication(msg.getFrom(), msg.getGroupId());
-						addMember2Group(msg.getFrom(),msg.getGroupId());
 					}
 					((Activity) context).runOnUiThread(new Runnable() {
 
@@ -216,28 +213,6 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 				}
 			}
 		}).start();
-	}
-
-	private void addMember2Group(String username, final String hxid) {
-		final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
-		utils.setRequestUrl(I.REQUEST_ADD_GROUP_MEMBER)
-				.addParam(I.Member.GROUP_HX_ID,hxid)
-				.addParam(I.Member.USER_NAME,username)
-				.targetClass(String.class)
-				.execute(new OkHttpUtils2.OnCompleteListener<String>() {
-					@Override
-					public void onSuccess(String str) {
-						Result result = Utils.getResultFromJson(str, GroupAvatar.class);
-						if (result != null && result.isRetMsg()) {
-							new DownloadMemberMapTask(context, hxid);
-						}
-					}
-
-					@Override
-					public void onError(String error) {
-
-					}
-				});
 	}
 
 	private static class ViewHolder {

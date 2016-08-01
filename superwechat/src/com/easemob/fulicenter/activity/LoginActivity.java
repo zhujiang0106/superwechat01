@@ -47,7 +47,6 @@ import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.db.UserDao;
 import com.easemob.fulicenter.domain.User;
 import com.easemob.fulicenter.task.DownloadContactsListTask;
-import com.easemob.fulicenter.task.DownloadGroupsListTask;
 import com.easemob.fulicenter.utils.CommonUtils;
 import com.easemob.fulicenter.utils.I;
 import com.easemob.fulicenter.utils.UserUtils;
@@ -260,7 +259,6 @@ public class LoginActivity extends BaseActivity {
 		FuliCenterApplication.currentUserNick = user.getMUserNick();
 
 		new DownloadContactsListTask(LoginActivity.this,currentUsername).getContacts();
-		new DownloadGroupsListTask(LoginActivity.this,currentUsername).getContacts();
 		try {
 			// ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
 			// ** manually load all local groups and
@@ -307,22 +305,7 @@ public class LoginActivity extends BaseActivity {
 		newFriends.setNick(strChat);
 
 		userlist.put(Constant.NEW_FRIENDS_USERNAME, newFriends);
-		// 添加"群聊"
-		User groupUser = new User();
-		String strGroup = getResources().getString(R.string.group_chat);
-		groupUser.setUsername(Constant.GROUP_USERNAME);
-		groupUser.setNick(strGroup);
-		groupUser.setHeader("");
-		userlist.put(Constant.GROUP_USERNAME, groupUser);
-		
-//		// 添加"Robot"
-//		User robotUser = new User();
-//		String strRobot = getResources().getString(R.string.robot_chat);
-//		robotUser.setUsername(Constant.CHAT_ROBOT);
-//		robotUser.setNick(strRobot);
-//		robotUser.setHeader("");
-//		userlist.put(Constant.CHAT_ROBOT, robotUser);
-		
+
 		// 存入内存
 		((DemoHXSDKHelper)HXSDKHelper.getInstance()).setContactList(userlist);
 		// 存入db

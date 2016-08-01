@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="购物车"
-                android:textColor="#000"
+                android:textColor="#9B9B9B"
                 android:textSize="16sp"
                 android:background="@null"/>
             <TextView
@@ -47,8 +47,8 @@
                 android:textColor="#fff"/>
         </RelativeLayout>
         <Button
-            android:id="@+id/btnContacts"
-            android:text="联系人"
+            android:id="@+id/btnPersonal"
+            android:text="个人中心"
             android:drawableTop="@drawable/menu_item_personal_center_normal"
             style="@style/MyTheme" />
     </LinearLayout>

@@ -55,46 +55,89 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void setListener() {
+        setPullDownRefreshListener();
+        setPullUpRefreshListener();
+    }
+
+    private void setPullUpRefreshListener() {
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            int lastItemPosition;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastItemPosition >= mGoodAdapter.getItemCount() - 1
+                        ) {
+                    if (mGoodAdapter.isMore()) {
+                        pageId++;
+                        findNewGoodList(I.ACTION_PULL_UP,pageId);
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastItemPosition = mGridLayoutManager.findLastVisibleItemPosition();
+            }
+        });
+    }
+
+    private void setPullDownRefreshListener() {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 tvHint.setVisibility(View.VISIBLE);
                 pageId = 1;
-                initData();
+                findNewGoodList(I.ACTION_PULL_DOWN,pageId);
             }
         });
     }
 
     private void initData() {
-        findNewGoodList();
+        findNewGoodList(I.ACTION_DOWNLOAD,pageId);
     }
-    private void findNewGoodList() {
+    private void findNewGoodList(final int action, int pageid) {
         OkHttpUtils2<NewGoodBean[]> utils = new OkHttpUtils2<NewGoodBean[]>();
-        Log.i("main", "1111");
         utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
                 .addParam(I.NewAndBoutiqueGood.CAT_ID,String.valueOf(I.CAT_ID))
-                .addParam(I.PAGE_ID,String.valueOf(pageId))
+                .addParam(I.PAGE_ID,String.valueOf(pageid))
                 .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))
                 .targetClass(NewGoodBean[].class)
                 .execute(new OkHttpUtils2.OnCompleteListener<NewGoodBean[]>() {
                     @Override
                     public void onSuccess(NewGoodBean[] result) {
                         Log.i("main", "result=" + result);
-                        tvHint.setVisibility(View.GONE);
-                        mSwipeRefreshLayout.setRefreshing(false);
+                        mGoodAdapter.setMore(true);
                         if (result != null) {
-                            Log.i("main", "result.lenth=" + result.length);
                             ArrayList<NewGoodBean> goodBeanArrayList = Utils.array2List(result);
-                            mGoodAdapter.initData(goodBeanArrayList);
+                            Log.i("main", "goodBeanArrayList.size=" + goodBeanArrayList.size());
+                            switch (action) {
+                                case I.ACTION_DOWNLOAD:
+                                    mGoodAdapter.initData(goodBeanArrayList);
+                                    mGoodAdapter.setFooterText(getResources().getString(R.string.load_more));
+                                    break;
+                                case I.ACTION_PULL_DOWN:
+                                    mGoodAdapter.initData(goodBeanArrayList);
+                                    tvHint.setVisibility(View.GONE);
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                    mGoodAdapter.setFooterText(getResources().getString(R.string.load_more));
+                                    break;
+                                case I.ACTION_PULL_UP:
+                                    if (goodBeanArrayList.size() < I.PAGE_SIZE_DEFAULT) {
+                                        mGoodAdapter.setMore(false);
+                                        mGoodAdapter.setFooterText(getResources().getString(R.string.no_more));
+                                    }
+                                    mGoodAdapter.addData(goodBeanArrayList);
+                                    break;
+                            }
                         }
                     }
 
                     @Override
                     public void onError(String error) {
-                        Log.i("main", "4444");
                     }
                 });
-        Log.i("main", "2222");
     }
 
     private void initView(View layout) {

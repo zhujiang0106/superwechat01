@@ -19,6 +19,7 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fuli_center_main);
         initView();
+        setDrawable(btnNewGoods, R.drawable.menu_item_new_good_selected, Color.BLACK);
         setListener();
     }
     private void setListener() {

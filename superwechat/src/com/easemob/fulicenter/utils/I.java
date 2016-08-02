@@ -298,7 +298,6 @@ public interface I {
 	int MSG_LOCATION_UPDATE_FAIL					=		504;							//用户更新地理位置失败
 	int MSG_UNKNOW									=		999;							//未知错误
 
-
     String SERVER_TOOL								 	= 		"http://10.0.2.2:8080/FuLiCenterServer/Server";
     String QUESTION 									= 		"?";							//问号
     String EQUALS 										= 		"=";							//等号

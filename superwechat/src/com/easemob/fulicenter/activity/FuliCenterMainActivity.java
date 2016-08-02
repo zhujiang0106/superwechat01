@@ -10,8 +10,9 @@ import android.widget.Button;
 
 import com.easemob.fulicenter.R;
 
-public class FuliCenterMainActivity extends Activity implements View.OnClickListener{
+public class FuliCenterMainActivity extends BaseActivity implements View.OnClickListener{
     Button btnNewGoods,btnBoutique,btnCategory,btnCart,btnPersonal;
+    NewGoodsFragment mNewGoodsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +21,6 @@ public class FuliCenterMainActivity extends Activity implements View.OnClickList
         initView();
         setListener();
     }
-
     private void setListener() {
         btnNewGoods.setOnClickListener(this);
         btnBoutique.setOnClickListener(this);
@@ -35,6 +35,12 @@ public class FuliCenterMainActivity extends Activity implements View.OnClickList
         btnCategory = (Button) findViewById(R.id.btnCategory);
         btnCart = (Button) findViewById(R.id.btnCart);
         btnPersonal = (Button) findViewById(R.id.btnPersonal);
+
+        mNewGoodsFragment = new NewGoodsFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mNewGoodsFragment)
+//                .add(R.id.fragment_container, contactListFragment).hide(contactListFragment)
+                .show(mNewGoodsFragment)
+                .commit();
     }
 
     @Override

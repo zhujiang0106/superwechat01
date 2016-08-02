@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.bean.NewGoodBean;
+import com.easemob.fulicenter.utils.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (holder instanceof GoodViewHolder) {
             mGoodViewHolder = (GoodViewHolder) holder;
             NewGoodBean good = mGoodList.get(position);
+            ImageUtils.setGoodThumb(mContext, mGoodViewHolder.ivGoodThumb, good.getGoodsThumb());
             mGoodViewHolder.tvGoodName.setText(good.getGoodsName());
             mGoodViewHolder.tvGoodPrice.setText(good.getCurrencyPrice());
         }
@@ -52,6 +54,14 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount() {
         return mGoodList.size();
+    }
+
+    public void initData(ArrayList<NewGoodBean> goodBeanArrayList) {
+        if (mGoodList != null) {
+            mGoodList.clear();
+        }
+        mGoodList.addAll(goodBeanArrayList);
+        notifyDataSetChanged();
     }
 
     private class GoodViewHolder extends ViewHolder {

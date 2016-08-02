@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.adapter.GoodAdapter;
@@ -34,6 +35,7 @@ public class NewGoodsFragment extends Fragment {
     List<NewGoodBean> mGoodList;
 
     int pageId = 1;
+    TextView tvHint;
 
     public NewGoodsFragment() {
         // Required empty public constructor
@@ -48,13 +50,25 @@ public class NewGoodsFragment extends Fragment {
         mGoodList = new ArrayList<NewGoodBean>();
         initView(layout);
         initData();
+        setListener();
         return layout;
+    }
+
+    private void setListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                tvHint.setVisibility(View.VISIBLE);
+                pageId = 1;
+                initData();
+            }
+        });
     }
 
     private void initData() {
         findNewGoodList();
     }
-    private void findNewGoodList(/*OkHttpUtils2.OnCompleteListener<NewGoodBean[]> listener*/) {
+    private void findNewGoodList() {
         OkHttpUtils2<NewGoodBean[]> utils = new OkHttpUtils2<NewGoodBean[]>();
         Log.i("main", "1111");
         utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
@@ -66,6 +80,8 @@ public class NewGoodsFragment extends Fragment {
                     @Override
                     public void onSuccess(NewGoodBean[] result) {
                         Log.i("main", "result=" + result);
+                        tvHint.setVisibility(View.GONE);
+                        mSwipeRefreshLayout.setRefreshing(false);
                         if (result != null) {
                             Log.i("main", "result.lenth=" + result.length);
                             ArrayList<NewGoodBean> goodBeanArrayList = Utils.array2List(result);
@@ -97,6 +113,7 @@ public class NewGoodsFragment extends Fragment {
         mRecyclerView.setLayoutManager(mGridLayoutManager);
         mGoodAdapter = new GoodAdapter(mContext, mGoodList);
         mRecyclerView.setAdapter(mGoodAdapter);
+        tvHint = (TextView) layout.findViewById(R.id.tv_refresh_hint);
     }
 
 }

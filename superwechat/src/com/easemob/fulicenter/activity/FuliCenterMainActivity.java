@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,13 @@ import com.easemob.fulicenter.R;
 public class FuliCenterMainActivity extends BaseActivity implements View.OnClickListener{
     Button btnNewGoods,btnBoutique,btnCategory,btnCart,btnPersonal;
     NewGoodsFragment mNewGoodsFragment;
+    BoutiqueFragment mBoutiqueFragment;
+
+    FragmentTransaction mTransaction;
+    private Fragment[] fragments;
+
+    private int index;
+    private int currentIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +47,11 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
         btnPersonal = (Button) findViewById(R.id.btnPersonal);
 
         mNewGoodsFragment = new NewGoodsFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mNewGoodsFragment)
-//                .add(R.id.fragment_container, contactListFragment).hide(contactListFragment)
+        mBoutiqueFragment = new BoutiqueFragment();
+        fragments = new Fragment[]{mNewGoodsFragment, mBoutiqueFragment};
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, mNewGoodsFragment)
+                .add(R.id.fragment_container, mBoutiqueFragment).hide(mBoutiqueFragment)
                 .show(mNewGoodsFragment)
                 .commit();
     }
@@ -50,9 +62,11 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.btnNewGoods:
                 setDrawable(btnNewGoods, R.drawable.menu_item_new_good_selected, Color.BLACK);
+                index = 0;
                 break;
             case R.id.btnBoutique:
                 setDrawable(btnBoutique, R.drawable.boutique_selected, Color.BLACK);
+                index = 1;
                 break;
             case R.id.btnCategory:
                 setDrawable(btnCategory, R.drawable.menu_item_category_selected, Color.BLACK);
@@ -63,6 +77,15 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
             case R.id.btnPersonal:
                 setDrawable(btnPersonal, R.drawable.menu_item_personal_center_selected, Color.BLACK);
                 break;
+        }
+        if (currentIndex != index) {
+            mTransaction = getSupportFragmentManager().beginTransaction();
+            mTransaction.hide(fragments[currentIndex]);
+            if (!fragments[index].isAdded()) {
+                mTransaction.add(R.id.fragment_container, fragments[index]);
+            }
+            mTransaction.show(fragments[index]).commit();
+            currentIndex = index;
         }
     }
 

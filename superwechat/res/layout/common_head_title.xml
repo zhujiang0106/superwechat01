@@ -7,7 +7,8 @@
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:onClick="onBack">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

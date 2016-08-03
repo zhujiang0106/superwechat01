@@ -3,6 +3,7 @@ package com.easemob.fulicenter.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,5 +52,9 @@ public class GoodDetailsActivity extends Activity {
         mSlideAutoLoopView = (SlideAutoLoopView) findViewById(R.id.sav);
         mFlowIndicator = (FlowIndicator) findViewById(R.id.ti_indicator);
         wvGoodBrief = (WebView) findViewById(R.id.wv_good_brief);
+    }
+
+    public void onBack(View view) {
+        finish();
     }
 }

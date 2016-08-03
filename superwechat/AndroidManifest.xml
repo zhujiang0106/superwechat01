@@ -37,7 +37,6 @@
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.easemob.fulicenter.permission.C2D_MESSAGE" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -284,7 +283,8 @@
             android:value="3ecea51f560650b1ed8a4b99808f52e8" />
 
         <activity android:name=".activity.FuliCenterMainActivity" />
-        <activity android:name=".activity.GoodDetailsActivity"></activity>
+        <activity android:name=".activity.GoodDetailsActivity" />
+        <activity android:name=".activity.BoutiqueDetailsActivity"></activity>
     </application>
 
 </manifest>

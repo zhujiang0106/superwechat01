@@ -223,7 +223,8 @@ public interface I {
     public final int NEW_GOOD=0;
     public final int CATEGORY_GOOD=1;
     public final int CAT_ID=0;
-    
+    public final int CAT_ID_Boutique=262;
+
     /**
      * 商品排序方式
      */

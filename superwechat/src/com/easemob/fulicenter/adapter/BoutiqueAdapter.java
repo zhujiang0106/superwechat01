@@ -1,6 +1,7 @@
 package com.easemob.fulicenter.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -12,6 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.easemob.fulicenter.R;
+import com.easemob.fulicenter.activity.BoutiqueDetailsActivity;
+import com.easemob.fulicenter.activity.GoodDetailsActivity;
+import com.easemob.fulicenter.activity.NewGoodsFragment;
 import com.easemob.fulicenter.bean.BoutiqueBean;
 import com.easemob.fulicenter.utils.ImageUtils;
 
@@ -44,12 +48,17 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (holder instanceof BoutiqueViewHolder) {
             mBoutiqueViewHolder = (BoutiqueViewHolder) holder;
-            BoutiqueBean boutique = mBoutiqueList.get(position);
+            final BoutiqueBean boutique = mBoutiqueList.get(position);
             ImageUtils.setGoodThumb(mContext, mBoutiqueViewHolder.ivBoutiqueThumb, boutique.getImageurl());
             mBoutiqueViewHolder.tvBoutiqueTitle.setText(boutique.getTitle());
             mBoutiqueViewHolder.tvBoutiqueName.setText(boutique.getName());
             mBoutiqueViewHolder.tvBoutiqueDesc.setText(boutique.getDescription());
-
+            mBoutiqueViewHolder.layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mContext.startActivity(new Intent(mContext, BoutiqueDetailsActivity.class).putExtra("title_name",boutique.getName()));
+                }
+            });
         }
     }
 

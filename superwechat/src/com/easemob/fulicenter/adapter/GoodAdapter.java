@@ -1,6 +1,7 @@
 package com.easemob.fulicenter.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easemob.fulicenter.R;
+import com.easemob.fulicenter.activity.GoodDetailsActivity;
 import com.easemob.fulicenter.bean.NewGoodBean;
 import com.easemob.fulicenter.utils.I;
 import com.easemob.fulicenter.utils.ImageUtils;
@@ -80,11 +82,17 @@ public class GoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (holder instanceof GoodViewHolder) {
             Log.i("main", "count=" + mGoodList.size());
             mGoodViewHolder = (GoodViewHolder) holder;
-            NewGoodBean good = mGoodList.get(position);
+            final NewGoodBean good = mGoodList.get(position);
             Log.i("main", "name=" + good.getGoodsName());
             ImageUtils.setGoodThumb(mContext, mGoodViewHolder.ivGoodThumb, good.getGoodsThumb());
             mGoodViewHolder.tvGoodName.setText(good.getGoodsName());
             mGoodViewHolder.tvGoodPrice.setText(good.getCurrencyPrice());
+            mGoodViewHolder.layout.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mContext.startActivity(new Intent(mContext, GoodDetailsActivity.class).putExtra("goodId", good.getGoodsId()));
+                }
+            });
         }
         if (holder instanceof FooterViewHolder) {
             mFooterViewHolder = (FooterViewHolder) holder;

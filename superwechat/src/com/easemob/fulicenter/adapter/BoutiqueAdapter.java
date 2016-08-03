@@ -8,10 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.bean.BoutiqueBean;
+import com.easemob.fulicenter.utils.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof BoutiqueViewHolder) {
             mBoutiqueViewHolder = (BoutiqueViewHolder) holder;
             BoutiqueBean boutique = mBoutiqueList.get(position);
+            ImageUtils.setGoodThumb(mContext, mBoutiqueViewHolder.ivBoutiqueThumb, boutique.getImageurl());
             mBoutiqueViewHolder.tvBoutiqueTitle.setText(boutique.getTitle());
             mBoutiqueViewHolder.tvBoutiqueName.setText(boutique.getName());
             mBoutiqueViewHolder.tvBoutiqueDesc.setText(boutique.getDescription());
@@ -55,13 +58,21 @@ public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mBoutiqueList.size();
     }
 
+    public void initData(ArrayList<BoutiqueBean> boutiqueArrayList) {
+        if (mBoutiqueList != null) {
+            mBoutiqueList.clear();
+        }
+        mBoutiqueList.addAll(boutiqueArrayList);
+        notifyDataSetChanged();
+    }
+
     private class BoutiqueViewHolder extends ViewHolder {
-        LinearLayout layout;
+        RelativeLayout layout;
         ImageView ivBoutiqueThumb;
         TextView tvBoutiqueTitle,tvBoutiqueName, tvBoutiqueDesc;
         public BoutiqueViewHolder(View view) {
             super(view);
-            layout = (LinearLayout) view.findViewById(R.id.layout_boutique);
+            layout = (RelativeLayout) view.findViewById(R.id.layout_boutique);
             ivBoutiqueThumb = (ImageView) view.findViewById(R.id.iv_boutique_thumb);
             tvBoutiqueTitle = (TextView) view.findViewById(R.id.tv_boutique_title);
             tvBoutiqueName = (TextView) view.findViewById(R.id.tv_boutique_name);

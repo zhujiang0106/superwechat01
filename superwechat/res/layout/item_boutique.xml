@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
     android:background="@color/white"
-    android:layout_margin="5dp"
-    android:id="@+id/layout_boutique"
-    android:weightSum="1">
+    android:padding="5dp"
+    android:id="@+id/layout_boutique">
     <ImageView
         android:id="@+id/iv_boutique_thumb"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="200dp"
         android:src="@drawable/nopic"
         android:scaleType="fitXY"
-        android:layout_gravity="center"
-        android:layout_weight="0.42"/>
+        android:layout_gravity="center"/>
     <LinearLayout
+        android:layout_toRightOf="@id/iv_boutique_thumb"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -65,4 +64,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

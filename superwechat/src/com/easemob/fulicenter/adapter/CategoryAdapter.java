@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.bean.CategoryGroupBean;
+import com.easemob.fulicenter.utils.ImageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (holder instanceof CategoryViewHolder) {
             mCategoryViewHolder = (CategoryViewHolder) holder;
             CategoryGroupBean categoryGroup = mCategoryList.get(position);
+            ImageUtils.setGoodThumb(mContext, mCategoryViewHolder.ivCategoryThumb, categoryGroup.getImageUrl());
             mCategoryViewHolder.tvCategoryName.setText(categoryGroup.getName());
         }
     }
@@ -50,6 +52,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return mCategoryList.size();
+    }
+
+    public void initData(ArrayList<CategoryGroupBean> categoryArrayList) {
+        if (mCategoryList != null) {
+            mCategoryList.clear();
+        }
+        mCategoryList.addAll(categoryArrayList);
+        notifyDataSetChanged();
     }
 
     private class CategoryViewHolder extends ViewHolder {

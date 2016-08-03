@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:padding="5dp"
     android:background="@color/white"
     android:id="@+id/layout_category">
     <RelativeLayout
@@ -29,8 +29,8 @@
             android:textColor="@color/list_item_name"/>
         <ImageView
             android:id="@+id/iv_category_expand"
-            android:layout_width="36dp"
-            android:layout_height="30dp"
+            android:layout_width="32dp"
+            android:layout_height="28dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="24dp"

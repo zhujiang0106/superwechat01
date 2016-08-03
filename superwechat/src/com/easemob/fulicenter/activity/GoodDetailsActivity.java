@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.easemob.fulicenter.D;
 import com.easemob.fulicenter.R;
+import com.easemob.fulicenter.bean.Albums;
 import com.easemob.fulicenter.bean.GoodDetailsBean;
 import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.utils.I;
@@ -80,6 +81,27 @@ public class GoodDetailsActivity extends Activity {
         tvGoodNameChi.setText(result.getGoodsName());
         tvGoodPriceShop.setText(result.getShopPrice());
         tvGoodPriceCurrent.setText(result.getCurrencyPrice());
+        mSlideAutoLoopView.startPlayLoop(mFlowIndicator,getImageUrl(result),getImageSize(result));
+        wvGoodBrief.loadDataWithBaseURL(null,result.getGoodsBrief(),D.TEXT_HTML,D.UTF_8,null);
+    }
+
+    private String[] getImageUrl(GoodDetailsBean result) {
+        String[] imageUrl = new String[]{};
+        if (result.getProperties() != null && result.getProperties().length > 0) {
+            Albums[] albums = result.getProperties()[0].getAlbums();
+            imageUrl = new String[albums.length];
+            for (int i=0;i<imageUrl.length;i++) {
+                imageUrl[i] = albums[i].getImgUrl();
+            }
+        }
+        return imageUrl;
+    }
+
+    private int getImageSize(GoodDetailsBean result) {
+        if (result.getProperties() != null && result.getProperties().length > 0) {
+            return result.getProperties()[0].getAlbums().length;
+        }
+        return 0;
     }
 
     private void initView() {

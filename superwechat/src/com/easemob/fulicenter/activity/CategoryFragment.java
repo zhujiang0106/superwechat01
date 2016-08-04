@@ -10,12 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.adapter.BoutiqueAdapter;
 import com.easemob.fulicenter.adapter.CategoryAdapter;
 import com.easemob.fulicenter.bean.BoutiqueBean;
+import com.easemob.fulicenter.bean.CategoryChildBean;
 import com.easemob.fulicenter.bean.CategoryGroupBean;
 import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.utils.I;
@@ -29,14 +31,17 @@ import java.util.List;
  */
 public class CategoryFragment extends Fragment {
     FuliCenterMainActivity mContext;
-    RecyclerView mRecyclerView;
-    LinearLayoutManager mLinearLayoutManager;
+    ExpandableListView melvCategory;
 
     CategoryAdapter mCategoryAdapter;
     List<CategoryGroupBean> mCategoryGroupList;
+    List<CategoryChildBean> mCategoryChildList;
+    List<List<CategoryChildBean>> mChildList;
+
+    long mGroupId;
+    int mPageId = 1;
 
     public CategoryFragment() {
-        // Required empty public constructor
     }
 
 
@@ -46,6 +51,8 @@ public class CategoryFragment extends Fragment {
         mContext = (FuliCenterMainActivity) getContext();
         View layout = View.inflate(mContext, R.layout.fragment_category, null);
         mCategoryGroupList = new ArrayList<CategoryGroupBean>();
+        mCategoryChildList = new ArrayList<CategoryChildBean>();
+        mChildList = new ArrayList<List<CategoryChildBean>>();
         initView(layout);
         initData();
         return layout;
@@ -53,6 +60,38 @@ public class CategoryFragment extends Fragment {
 
     private void initData() {
         findCategoryGroupList();
+    }
+
+    private void findCategoryChildList(List<CategoryGroupBean> groupList) {
+        int groupCount = groupList.size();
+        Log.i("main", "groupCount" + groupCount);
+        for (int i=0;i<groupCount;i++) {
+            CategoryGroupBean groupBean = groupList.get(i);
+            int id = groupBean.getId();
+            Log.i("main", "这个ID是：：" + id);
+            OkHttpUtils2<CategoryChildBean[]> utils = new OkHttpUtils2<CategoryChildBean[]>();
+            utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_CHILDREN)
+                    .addParam(I.CategoryChild.PARENT_ID, String.valueOf(id))
+                    .addParam(I.PAGE_ID, String.valueOf(mPageId))
+                    .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
+                    .targetClass(CategoryChildBean[].class)
+                    .execute(new OkHttpUtils2.OnCompleteListener<CategoryChildBean[]>() {
+                        @Override
+                        public void onSuccess(CategoryChildBean[] result) {
+                            Log.i("main", "result=" + result);
+                            if (result != null) {
+                                List<CategoryChildBean> childList = Utils.array2List(result);
+                                Log.i("main", "childList=" + childList.toString());
+                                mCategoryAdapter.initChildList(childList);
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
+
+                        }
+                    });
+        }
     }
 
     private void findCategoryGroupList() {
@@ -64,26 +103,24 @@ public class CategoryFragment extends Fragment {
                     public void onSuccess(CategoryGroupBean[] result) {
                         Log.i("main", "result=" + result);
                         if (result != null) {
-                            ArrayList<CategoryGroupBean> categoryArrayList = Utils.array2List(result);
-                            Log.i("main", "BoutiqueArrayList.size=" + categoryArrayList.size());
-                            mCategoryAdapter.initData(categoryArrayList);
+                            List<CategoryGroupBean> groupList = Utils.array2List(result);
+                            Log.i("main", "222" + groupList.toString());
+                            mCategoryAdapter.initData(groupList);
+                            findCategoryChildList(groupList);
                         }
                     }
 
                     @Override
                     public void onError(String error) {
-
                     }
                 });
     }
 
     private void initView(View layout) {
-        mCategoryAdapter = new CategoryAdapter(mContext, mCategoryGroupList);
-        mRecyclerView = (RecyclerView) layout.findViewById(R.id.rv_category);
-        mLinearLayoutManager = new LinearLayoutManager(mContext);
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setAdapter(mCategoryAdapter);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mCategoryAdapter = new CategoryAdapter(mContext, mCategoryGroupList,mChildList);
+        melvCategory = (ExpandableListView) layout.findViewById(R.id.rv_category);
+        melvCategory.setAdapter(mCategoryAdapter);
+        melvCategory.setGroupIndicator(null);
     }
 
 }

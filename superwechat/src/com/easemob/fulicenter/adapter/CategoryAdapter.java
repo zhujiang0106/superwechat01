@@ -1,13 +1,19 @@
 package com.easemob.fulicenter.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easemob.fulicenter.R;
+import com.easemob.fulicenter.activity.BoutiqueDetailsActivity;
+import com.easemob.fulicenter.activity.CategoryDetailsActivity;
 import com.easemob.fulicenter.bean.CategoryChildBean;
 import com.easemob.fulicenter.bean.CategoryGroupBean;
 import com.easemob.fulicenter.utils.ImageUtils;
@@ -118,7 +124,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ChildViewHolder holder;
-        CategoryChildBean child = mCategoryChildList.get(groupPosition).get(childPosition);
+        final CategoryChildBean child = mCategoryChildList.get(groupPosition).get(childPosition);
         if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.item_child, null);
             holder = new ChildViewHolder();
@@ -130,6 +136,13 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         }
         ImageUtils.setGoodThumb(mContext, holder.ivChild, child.getImageUrl());
         holder.tvChildName.setText(child.getName());
+        LinearLayout button = (LinearLayout) convertView.findViewById(R.id.layout_category_child);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(new Intent(mContext, CategoryDetailsActivity.class).putExtra("category_child_id",child.getId()));
+            }
+        });
         return convertView;
     }
     class ChildViewHolder {

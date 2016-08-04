@@ -27,7 +27,6 @@
             android:textColor="@color/good_detail_bg_white"
             android:textSize="22sp"
             android:layout_gravity="center_vertical"/>
-
     </LinearLayout>
 
 </RelativeLayout>

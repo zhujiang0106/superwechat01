@@ -284,7 +284,8 @@
 
         <activity android:name=".activity.FuliCenterMainActivity" />
         <activity android:name=".activity.GoodDetailsActivity" />
-        <activity android:name=".activity.BoutiqueDetailsActivity"></activity>
+        <activity android:name=".activity.BoutiqueDetailsActivity" />
+        <activity android:name=".activity.CategoryDetailsActivity"></activity>
     </application>
 
 </manifest>

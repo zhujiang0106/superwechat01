@@ -1,16 +1,14 @@
 package com.easemob.fulicenter.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easemob.fulicenter.R;
+import com.easemob.fulicenter.bean.CategoryChildBean;
 import com.easemob.fulicenter.bean.CategoryGroupBean;
 import com.easemob.fulicenter.utils.ImageUtils;
 
@@ -20,58 +18,128 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/8/1.
  */
-public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CategoryAdapter extends BaseExpandableListAdapter {
     Context mContext;
-    List<CategoryGroupBean> mCategoryList;
-    CategoryViewHolder mCategoryViewHolder;
-    public CategoryAdapter(Context context, List<CategoryGroupBean> list) {
+    List<CategoryGroupBean> mCategoryGroupList;
+    List<List<CategoryChildBean>> mCategoryChildList;
+
+    public CategoryAdapter(Context context, List<CategoryGroupBean> groupList, List<List<CategoryChildBean>> childList) {
         mContext = context;
-        mCategoryList = new ArrayList<CategoryGroupBean>();
-        mCategoryList.addAll(list);
+        mCategoryGroupList = new ArrayList<CategoryGroupBean>();
+        mCategoryGroupList.addAll(groupList);
+        mCategoryChildList = new ArrayList<List<CategoryChildBean>>();
+        mCategoryChildList.addAll(childList);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder holder = null;
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.item_category, null);
-        holder = new CategoryViewHolder(view);
-        return holder;
+    public int getGroupCount() {
+        return mCategoryGroupList.size();
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        if (holder instanceof CategoryViewHolder) {
-            mCategoryViewHolder = (CategoryViewHolder) holder;
-            CategoryGroupBean categoryGroup = mCategoryList.get(position);
-            ImageUtils.setGoodThumb(mContext, mCategoryViewHolder.ivCategoryThumb, categoryGroup.getImageUrl());
-            mCategoryViewHolder.tvCategoryName.setText(categoryGroup.getName());
+    public int getChildrenCount(int groupPosition) {
+        return mCategoryChildList.get(groupPosition).size();
+    }
+
+    @Override
+    public Object getGroup(int i) {
+        if (mCategoryGroupList != null) {
+            return mCategoryGroupList.get(i);
         }
+        return null;
     }
 
     @Override
-    public int getItemCount() {
-        return mCategoryList.size();
+    public Object getChild(int groupPosition, int childPosition) {
+        if (mCategoryChildList != null) {
+            return mCategoryChildList.get(groupPosition).get(childPosition);
+        }
+        return null;
     }
 
-    public void initData(ArrayList<CategoryGroupBean> categoryArrayList) {
-        if (mCategoryList != null) {
-            mCategoryList.clear();
+    @Override
+    public long getGroupId(int i) {
+        return 0;
+    }
+
+    @Override
+    public long getChildId(int i, int i1) {
+        return 0;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public View getGroupView(int groupPosition, boolean isExpanded, View view, ViewGroup viewGroup) {
+        GroupViewHolder holder;
+        CategoryGroupBean group = mCategoryGroupList.get(groupPosition);
+        if (view == null) {
+            view = View.inflate(mContext, R.layout.item_category, null);
+            holder = new GroupViewHolder();
+            holder.ivCategoryThumb = (ImageView) view.findViewById(R.id.iv_category_thumb);
+            holder.ivCategoryExpand = (ImageView) view.findViewById(R.id.iv_category_expand);
+            holder.tvCategoryName = (TextView) view.findViewById(R.id.tv_category_name);
+            view.setTag(holder);
+        } else {
+            holder = (GroupViewHolder) view.getTag();
         }
-        mCategoryList.addAll(categoryArrayList);
+        ImageUtils.setGoodThumb(mContext, holder.ivCategoryThumb, group.getImageUrl());
+        holder.tvCategoryName.setText(group.getName());
+        if (isExpanded) {
+            holder.ivCategoryExpand.setImageResource(R.drawable.expand_off);
+        } else {
+            holder.ivCategoryExpand.setImageResource(R.drawable.expand_on);
+        }
+        return view;
+    }
+
+    public void initData(List<CategoryGroupBean> groupList) {
+        if (mCategoryGroupList != null) {
+            mCategoryGroupList.clear();
+        }
+        mCategoryGroupList.addAll(groupList);
         notifyDataSetChanged();
     }
 
-    private class CategoryViewHolder extends ViewHolder {
-        LinearLayout layout;
-        ImageView ivCategoryThumb,ivCategoryExpand;
-        TextView tvCategoryName;
-        public CategoryViewHolder(View view) {
-            super(view);
-            layout = (LinearLayout) view.findViewById(R.id.layout_category);
-            ivCategoryThumb = (ImageView) view.findViewById(R.id.iv_category_thumb);
-            ivCategoryExpand = (ImageView) view.findViewById(R.id.iv_category_expand);
-            tvCategoryName = (TextView) view.findViewById(R.id.tv_category_name);
-        }
+    public void initChildList(List<CategoryChildBean> childList) {
+        mCategoryChildList.add(childList);
+        notifyDataSetChanged();
     }
+
+    class GroupViewHolder {
+        ImageView ivCategoryThumb;
+        ImageView ivCategoryExpand;
+        TextView tvCategoryName;
+    }
+
+    @Override
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        ChildViewHolder holder;
+        CategoryChildBean child = mCategoryChildList.get(groupPosition).get(childPosition);
+        if (convertView == null) {
+            convertView = View.inflate(mContext, R.layout.item_child, null);
+            holder = new ChildViewHolder();
+            holder.ivChild = (ImageView) convertView.findViewById(R.id.iv_child_thumb);
+            holder.tvChildName = (TextView) convertView.findViewById(R.id.tv_child_name);
+            convertView.setTag(holder);
+        } else {
+            holder = (ChildViewHolder) convertView.getTag();
+        }
+        ImageUtils.setGoodThumb(mContext, holder.ivChild, child.getImageUrl());
+        holder.tvChildName.setText(child.getName());
+        return convertView;
+    }
+    class ChildViewHolder {
+        ImageView ivChild;
+        TextView tvChildName;
+    }
+
+    @Override
+    public boolean isChildSelectable(int i, int i1) {
+        return false;
+    }
+
 }

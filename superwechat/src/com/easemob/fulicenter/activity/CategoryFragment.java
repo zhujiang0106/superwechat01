@@ -63,10 +63,11 @@ public class CategoryFragment extends Fragment {
     }
 
     private void findCategoryChildList(List<CategoryGroupBean> groupList) {
-        int groupCount = groupList.size();
+        final int groupCount = groupList.size();
         Log.i("main", "groupCount" + groupCount);
         for (int i=0;i<groupCount;i++) {
             CategoryGroupBean groupBean = groupList.get(i);
+            final int index = i;
             int id = groupBean.getId();
             Log.i("main", "这个ID是：：" + id);
             OkHttpUtils2<CategoryChildBean[]> utils = new OkHttpUtils2<CategoryChildBean[]>();
@@ -82,7 +83,11 @@ public class CategoryFragment extends Fragment {
                             if (result != null) {
                                 List<CategoryChildBean> childList = Utils.array2List(result);
                                 Log.i("main", "childList=" + childList.toString());
-                                mCategoryAdapter.initChildList(childList);
+                                if (index == groupCount - 1) {
+
+                                } else {
+                                    mCategoryAdapter.initChildList(childList);
+                                }
                             }
                         }
 

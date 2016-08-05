@@ -4,7 +4,7 @@
     <RelativeLayout
         android:id="@+id/layout_category_details_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:background="@color/main_orange">
         <LinearLayout
             android:id="@+id/back_category"
@@ -18,35 +18,18 @@
                 android:src="@drawable/back"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
-        <LinearLayout
+        <com.easemob.fulicenter.CatChildFilterButton
+            android:id="@+id/btnCatChildFilter"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true">
-            <TextView
-                android:id="@+id/tv_head_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="分类"
-                android:textColor="@color/good_detail_bg_white"
-                android:textSize="22sp"
-                android:gravity="center"/>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/choice_category"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:background="@color/google_yellow"
-            android:padding="10dp"
-            android:onClick="onBack">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="筛选"
-                android:textColor="@color/bd_wallet_fp_text_white"
-                android:textSize="18sp"
-                android:layout_gravity="center_vertical"/>
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="10dp"
+            android:drawableRight="@drawable/arrow2_up"
+            android:background="@null"
+            android:textColor="@color/white"
+            android:text="分类"/>
     </RelativeLayout>
     <LinearLayout
         android:id="@+id/layout_category_sort"

@@ -36,7 +36,7 @@ public class CategoryFragment extends Fragment {
     CategoryAdapter mCategoryAdapter;
     List<CategoryGroupBean> mCategoryGroupList;
     List<CategoryChildBean> mCategoryChildList;
-    List<List<CategoryChildBean>> mChildList;
+    List<ArrayList<CategoryChildBean>> mChildList;
 
     long mGroupId;
     int mPageId = 1;
@@ -52,7 +52,7 @@ public class CategoryFragment extends Fragment {
         View layout = View.inflate(mContext, R.layout.fragment_category, null);
         mCategoryGroupList = new ArrayList<CategoryGroupBean>();
         mCategoryChildList = new ArrayList<CategoryChildBean>();
-        mChildList = new ArrayList<List<CategoryChildBean>>();
+        mChildList = new ArrayList<ArrayList<CategoryChildBean>>();
         initView(layout);
         initData();
         return layout;
@@ -81,7 +81,7 @@ public class CategoryFragment extends Fragment {
                         public void onSuccess(CategoryChildBean[] result) {
                             Log.i("main", "result=" + result);
                             if (result != null) {
-                                List<CategoryChildBean> childList = Utils.array2List(result);
+                                ArrayList<CategoryChildBean> childList = Utils.array2List(result);
                                 Log.i("main", "childList=" + childList.toString());
                                 if (index == groupCount - 1) {
 

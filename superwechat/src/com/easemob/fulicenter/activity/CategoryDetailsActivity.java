@@ -14,8 +14,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easemob.fulicenter.CatChildFilterButton;
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.adapter.GoodAdapter;
+import com.easemob.fulicenter.bean.CategoryChildBean;
 import com.easemob.fulicenter.bean.NewGoodBean;
 import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.utils.I;
@@ -31,6 +33,10 @@ public class CategoryDetailsActivity extends Activity {
     GridLayoutManager mGridLayoutManager;
     GoodAdapter mGoodAdapter;
     List<NewGoodBean> mGoodList;
+
+    CatChildFilterButton mCatChildFilterButton;
+    String name;
+    ArrayList<CategoryChildBean> childList;
 
     Button mSortPrice;
     Button mSortTime;
@@ -62,6 +68,7 @@ public class CategoryDetailsActivity extends Activity {
         Log.i("main", "22SortBy=" + sortBy);
         mSortPrice.setOnClickListener(listener);
         mSortTime.setOnClickListener(listener);
+        mCatChildFilterButton.setOnCatFilterClickListener(name,childList);
     }
     private void setPullUpRefreshListener() {
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -99,6 +106,7 @@ public class CategoryDetailsActivity extends Activity {
     }
 
     private void initData() {
+        childList = (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra("childList");
         findNewGoodList(I.ACTION_DOWNLOAD,pageId);
     }
 
@@ -166,6 +174,9 @@ public class CategoryDetailsActivity extends Activity {
         tvHint = (TextView) findViewById(R.id.tv_refresh_hint);
         mSortPrice = (Button) findViewById(R.id.btn_sort_price);
         mSortTime = (Button) findViewById(R.id.btn_sort_time);
+        mCatChildFilterButton = (CatChildFilterButton) findViewById(R.id.btnCatChildFilter);
+        name = getIntent().getStringExtra("category_group_name");
+        mCatChildFilterButton.setText(name);
     }
     public void onCategoryBack(View view) {
         finish();

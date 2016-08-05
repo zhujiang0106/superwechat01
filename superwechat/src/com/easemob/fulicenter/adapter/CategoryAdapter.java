@@ -27,13 +27,13 @@ import java.util.List;
 public class CategoryAdapter extends BaseExpandableListAdapter {
     Context mContext;
     List<CategoryGroupBean> mCategoryGroupList;
-    List<List<CategoryChildBean>> mCategoryChildList;
+    List<ArrayList<CategoryChildBean>> mCategoryChildList;
 
-    public CategoryAdapter(Context context, List<CategoryGroupBean> groupList, List<List<CategoryChildBean>> childList) {
+    public CategoryAdapter(Context context, List<CategoryGroupBean> groupList, List<ArrayList<CategoryChildBean>> childList) {
         mContext = context;
         mCategoryGroupList = new ArrayList<CategoryGroupBean>();
         mCategoryGroupList.addAll(groupList);
-        mCategoryChildList = new ArrayList<List<CategoryChildBean>>();
+        mCategoryChildList = new ArrayList<ArrayList<CategoryChildBean>>();
         mCategoryChildList.addAll(childList);
     }
 
@@ -110,7 +110,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         notifyDataSetChanged();
     }
 
-    public void initChildList(List<CategoryChildBean> childList) {
+    public void initChildList(ArrayList<CategoryChildBean> childList) {
         mCategoryChildList.add(childList);
         notifyDataSetChanged();
     }
@@ -122,7 +122,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ChildViewHolder holder;
         final CategoryChildBean child = mCategoryChildList.get(groupPosition).get(childPosition);
         if (convertView == null) {
@@ -140,7 +140,9 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mContext.startActivity(new Intent(mContext, CategoryDetailsActivity.class).putExtra("category_child_id",child.getId()));
+                mContext.startActivity(new Intent(mContext, CategoryDetailsActivity.class).putExtra("category_child_id",child.getId())
+                .putExtra("category_group_name",mCategoryGroupList.get(groupPosition).getName())
+                .putExtra("childList",mCategoryChildList.get(groupPosition)));
             }
         });
         return convertView;

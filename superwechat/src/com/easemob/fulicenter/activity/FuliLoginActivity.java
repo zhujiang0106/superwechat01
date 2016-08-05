@@ -1,6 +1,7 @@
 package com.easemob.fulicenter.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -15,6 +16,8 @@ public class FuliLoginActivity extends Activity {
     }
 
     public void onPersonBack(View view) {
+        Intent intent = new Intent(FuliLoginActivity.this, FuliCenterMainActivity.class);
+        startActivity(intent);
         finish();
     }
 }

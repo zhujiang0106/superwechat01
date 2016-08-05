@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,12 @@ public class CategoryDetailsActivity extends Activity {
     GoodAdapter mGoodAdapter;
     List<NewGoodBean> mGoodList;
 
+    Button mSortPrice;
+    Button mSortTime;
+    boolean mSortPriceAsc;
+    boolean mSortTimeAsc;
+    int sortBy;
+
     int pageId = 1;
     TextView tvHint;
     int childId;
@@ -39,6 +47,8 @@ public class CategoryDetailsActivity extends Activity {
         childId = getIntent().getIntExtra("category_child_id",0);
         mContext = this;
         mGoodList = new ArrayList<NewGoodBean>();
+        sortBy = I.SORT_BY_ADDTIME_DESC;
+        Log.i("main", "11SortBy=" + sortBy);
         initView();
         initData();
         setListener();
@@ -47,6 +57,10 @@ public class CategoryDetailsActivity extends Activity {
     private void setListener() {
         setPullDownRefreshListener();
         setPullUpRefreshListener();
+        SortStatusChangeListener listener = new SortStatusChangeListener();
+        Log.i("main", "22SortBy=" + sortBy);
+        mSortPrice.setOnClickListener(listener);
+        mSortTime.setOnClickListener(listener);
     }
     private void setPullUpRefreshListener() {
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -149,8 +163,39 @@ public class CategoryDetailsActivity extends Activity {
         mGoodAdapter = new GoodAdapter(mContext, mGoodList);
         mRecyclerView.setAdapter(mGoodAdapter);
         tvHint = (TextView) findViewById(R.id.tv_refresh_hint);
+        mSortPrice = (Button) findViewById(R.id.btn_sort_price);
+        mSortTime = (Button) findViewById(R.id.btn_sort_time);
     }
     public void onCategoryBack(View view) {
         finish();
+    }
+
+    class SortStatusChangeListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.btn_sort_price:
+                    Log.i("main", "33SortBy=" + sortBy);
+                    if (mSortPriceAsc) {
+                        sortBy = I.SORT_BY_PRICE_ASC;
+                    } else {
+                        sortBy = I.SORT_BY_PRICE_DESC;
+                    }
+                    mSortPriceAsc = !mSortPriceAsc;
+                    break;
+                case R.id.btn_sort_time:
+                    Log.i("main", "44SortBy=" + sortBy);
+                    if (mSortTimeAsc) {
+                        sortBy = I.SORT_BY_ADDTIME_ASC;
+                    } else {
+                        sortBy = I.SORT_BY_ADDTIME_DESC;
+                    }
+                    Log.i("main", "55SortBy=" + sortBy);
+                    mSortTimeAsc = !mSortTimeAsc;
+                    break;
+            }
+            mGoodAdapter.setSortBy(sortBy);
+        }
     }
 }

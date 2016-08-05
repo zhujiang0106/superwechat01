@@ -163,7 +163,7 @@
             android:layout_marginLeft="28dp"
             android:layout_marginRight="28dp"
             android:layout_below="@id/rl_password"
-            android:background="@color/ebpay_text_orange1">
+            android:background="@drawable/tb_btn_login_orange_normal">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

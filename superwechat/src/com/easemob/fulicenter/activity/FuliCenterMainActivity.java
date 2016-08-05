@@ -17,6 +17,7 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
     NewGoodsFragment mNewGoodsFragment;
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
+    PersonFragment mPersonFragment;
 
     FragmentTransaction mTransaction;
     private Fragment[] fragments;
@@ -50,7 +51,8 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
         mNewGoodsFragment = new NewGoodsFragment();
         mBoutiqueFragment = new BoutiqueFragment();
         mCategoryFragment = new CategoryFragment();
-        fragments = new Fragment[]{mNewGoodsFragment, mBoutiqueFragment, mCategoryFragment};
+        mPersonFragment = new PersonFragment();
+        fragments = new Fragment[]{mNewGoodsFragment, mBoutiqueFragment, mCategoryFragment,mPersonFragment};
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mNewGoodsFragment)
                 .add(R.id.fragment_container, mBoutiqueFragment).hide(mBoutiqueFragment)
@@ -78,6 +80,7 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
                 setDrawable(btnCart, R.drawable.menu_item_cart_selected, Color.BLACK);
                 break;
             case R.id.btnPersonal:
+                index = 3;
                 setDrawable(btnPersonal, R.drawable.menu_item_personal_center_selected, Color.BLACK);
                 break;
         }

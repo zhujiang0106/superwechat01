@@ -1,6 +1,7 @@
 package com.easemob.fulicenter.activity;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -174,25 +175,34 @@ public class CategoryDetailsActivity extends Activity {
 
         @Override
         public void onClick(View view) {
+            Drawable right;
             switch (view.getId()) {
                 case R.id.btn_sort_price:
                     Log.i("main", "33SortBy=" + sortBy);
                     if (mSortPriceAsc) {
                         sortBy = I.SORT_BY_PRICE_ASC;
+                        right = getResources().getDrawable(R.drawable.arrow_order_up);
                     } else {
                         sortBy = I.SORT_BY_PRICE_DESC;
+                        right = getResources().getDrawable(R.drawable.arrow_order_down);
                     }
                     mSortPriceAsc = !mSortPriceAsc;
+                    right.setBounds(0, 0, right.getIntrinsicWidth(), right.getIntrinsicHeight());
+                    mSortPrice.setCompoundDrawablesWithIntrinsicBounds(null, null, right, null);
                     break;
                 case R.id.btn_sort_time:
                     Log.i("main", "44SortBy=" + sortBy);
                     if (mSortTimeAsc) {
                         sortBy = I.SORT_BY_ADDTIME_ASC;
+                        right = getResources().getDrawable(R.drawable.arrow_order_up);
                     } else {
                         sortBy = I.SORT_BY_ADDTIME_DESC;
+                        right = getResources().getDrawable(R.drawable.arrow_order_down);
                     }
                     Log.i("main", "55SortBy=" + sortBy);
                     mSortTimeAsc = !mSortTimeAsc;
+                    right.setBounds(0, 0, right.getIntrinsicWidth(), right.getIntrinsicHeight());
+                    mSortTime.setCompoundDrawablesWithIntrinsicBounds(null, null, right, null);
                     break;
             }
             mGoodAdapter.setSortBy(sortBy);

@@ -60,18 +60,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/arrow_order_up"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <Button
+                android:id="@+id/btn_sort_price"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableRight="@drawable/arrow_order_up"
                 android:text="价格"
                 android:textSize="16sp"
+                android:background="@null"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
         <RelativeLayout
@@ -79,18 +76,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/arrow_order_down"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <Button
+                android:id="@+id/btn_sort_time"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableRight="@drawable/arrow_order_down"
                 android:text="上架时间"
                 android:textSize="16sp"
+                android:background="@null"
                 android:layout_centerInParent="true"/>
         </RelativeLayout>
 

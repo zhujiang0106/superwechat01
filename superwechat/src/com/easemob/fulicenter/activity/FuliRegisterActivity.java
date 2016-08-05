@@ -6,12 +6,12 @@ import android.view.View;
 
 import com.easemob.fulicenter.R;
 
-public class FuliLoginActivity extends Activity {
+public class FuliRegisterActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fuli_login);
+        setContentView(R.layout.activity_fuli_register);
     }
 
     public void onPersonBack(View view) {

@@ -161,7 +161,7 @@
                 android:textSize="18sp" />
         </RelativeLayout>
         <LinearLayout
-            android:id="@+id/layout_person_login"
+            android:id="@+id/layout_person_register"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="22dp"

@@ -11,9 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.fulicenter.D;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.bean.Albums;
 import com.easemob.fulicenter.bean.GoodDetailsBean;
+import com.easemob.fulicenter.bean.MessageBean;
 import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.utils.I;
 import com.easemob.fulicenter.viewholder.FlowIndicator;
@@ -41,6 +43,42 @@ public class GoodDetailsActivity extends Activity {
         initData();
     }
 
+    private void addCollectListener(final GoodDetailsBean result) {
+        ivCollect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userName = FuliCenterApplication.getInstance().getUserName();
+                if (userName != null) {
+                    OkHttpUtils2<MessageBean> utils = new OkHttpUtils2<MessageBean>();
+                    utils.setRequestUrl(I.REQUEST_ADD_COLLECT)
+                            .addParam(I.Collect.USER_NAME,userName)
+                            .addParam(I.Collect.GOODS_ID, String.valueOf(result.getGoodsId()))
+                            .addParam(I.Collect.GOODS_NAME,result.getGoodsName())
+                            .addParam(I.Collect.GOODS_ENGLISH_NAME,result.getGoodsEnglishName())
+                            .addParam(I.Collect.GOODS_THUMB,result.getGoodsThumb())
+                            .addParam(I.Collect.GOODS_IMG,result.getGoodsImg())
+                            .addParam(I.Collect.ADD_TIME, String.valueOf(result.getAddTime()))
+                            .targetClass(MessageBean.class)
+                            .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                                @Override
+                                public void onSuccess(MessageBean result) {
+                                    if (result.isSuccess()) {
+                                        Toast.makeText(mContext, "添加收藏成功", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(mContext, "添加收藏失败", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    Toast.makeText(mContext, "添加收藏失败", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            }
+        });
+    }
+
     private void initData() {
         mGoodId = getIntent().getIntExtra("goodId", 0);
         Log.i("main", "mGoodId=" + mGoodId);
@@ -62,6 +100,7 @@ public class GoodDetailsActivity extends Activity {
                     public void onSuccess(GoodDetailsBean result) {
                         if (result != null) {
                             showGoodDetailsData(result);
+                            addCollectListener(result);
                         } else {
                             finish();
                             Log.i("main", "没有得到返回的result数据");

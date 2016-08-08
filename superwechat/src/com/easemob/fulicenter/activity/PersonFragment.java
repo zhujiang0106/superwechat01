@@ -71,6 +71,11 @@ public class PersonFragment extends Fragment {
         updateCollectCountListener();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     class MySetOnClickLIstener implements View.OnClickListener {
 
         @Override
@@ -98,6 +103,10 @@ public class PersonFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        myThread();
+    }
+
+    private void myThread() {
         new Thread(new Runnable() {
             public void run() {
                 if (DemoHXSDKHelper.getInstance().isLogined()) {

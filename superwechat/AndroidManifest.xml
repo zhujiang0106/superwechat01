@@ -287,7 +287,8 @@
         <activity android:name=".activity.BoutiqueDetailsActivity" />
         <activity android:name=".activity.CategoryDetailsActivity" />
         <activity android:name=".activity.FuliLoginActivity" />
-        <activity android:name=".activity.FuliRegisterActivity"></activity>
+        <activity android:name=".activity.FuliRegisterActivity" />
+        <activity android:name=".activity.SettingsActivity"></activity>
     </application>
 
 </manifest>

@@ -9,10 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.activity.GoodDetailsActivity;
 import com.easemob.fulicenter.bean.CollectBean;
+import com.easemob.fulicenter.bean.MessageBean;
+import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.utils.I;
 import com.easemob.fulicenter.utils.ImageUtils;
 import com.easemob.fulicenter.viewholder.FooterViewHolder;
@@ -91,6 +95,32 @@ public class CollectAdapter extends Adapter<ViewHolder> {
                     mContext.startActivity(new Intent(mContext, GoodDetailsActivity.class).putExtra("goodId", good.getGoodsId()));
                 }
             });
+            mCollectViewHolder.mDelete.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String userName = FuliCenterApplication.getInstance().getUserName();
+                    OkHttpUtils2<MessageBean> utils = new OkHttpUtils2<MessageBean>();
+                    utils.setRequestUrl(I.REQUEST_DELETE_COLLECT)
+                            .addParam(I.Collect.USER_NAME,userName)
+                            .addParam(I.Collect.GOODS_ID, String.valueOf(good.getGoodsId()))
+                            .targetClass(MessageBean.class)
+                            .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                                @Override
+                                public void onSuccess(MessageBean result) {
+                                    if (result.isSuccess()) {
+                                        Toast.makeText(mContext, "已经删除！", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(mContext, "删除失败！", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String error) {
+                                    Toast.makeText(mContext, "删除失败！", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            });
         }
         if (holder instanceof FooterViewHolder) {
             mFooterViewHolder = (FooterViewHolder) holder;
@@ -126,6 +156,7 @@ public class CollectAdapter extends Adapter<ViewHolder> {
     }
 
     private class CollectViewHolder extends ViewHolder {
+        ImageView mDelete;
         LinearLayout layout;
         ImageView ivGoodThumb;
         TextView tvGoodName, tvGoodPrice;
@@ -135,6 +166,7 @@ public class CollectAdapter extends Adapter<ViewHolder> {
             ivGoodThumb = (ImageView) view.findViewById(R.id.iv_good_thumb);
             tvGoodName = (TextView) view.findViewById(R.id.tv_good_name);
             tvGoodPrice = (TextView) view.findViewById(R.id.tv_good_price);
+            mDelete = (ImageView) view.findViewById(R.id.ivDelete);
         }
     }
 

@@ -4,9 +4,12 @@ package com.easemob.fulicenter.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.easemob.chat.EMChatManager;
 import com.easemob.chat.EMGroupManager;
@@ -20,6 +23,7 @@ import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.db.UserDao;
 import com.easemob.fulicenter.task.DownloadContactsListTask;
 import com.easemob.fulicenter.utils.I;
+import com.easemob.fulicenter.utils.UserUtils;
 import com.easemob.fulicenter.utils.Utils;
 
 import java.util.ArrayList;
@@ -29,8 +33,10 @@ import java.util.ArrayList;
  */
 public class PersonFragment extends Fragment {
     FuliCenterMainActivity mContext;
-    private static final int sleepTime = 1000;
+    private static final int sleepTime = 300;
 
+    ImageView ivAvatar;
+    TextView tvName,tvSetting;
     public PersonFragment() {
         // Required empty public constructor
     }
@@ -40,8 +46,35 @@ public class PersonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContext = (FuliCenterMainActivity) getContext();
-        View layout = View.inflate(mContext, R.layout.fragment_boutique, null);
+//        View layout = View.inflate(mContext, R.layout.fragment_person, null);
+        View layout = inflater.inflate(R.layout.fragment_person, container, false);
+        initView(layout);
+        setListener();
         return layout;
+//        return inflater.inflate(R.layout.fragment_person, container, false);
+    }
+
+    private void setListener() {
+        MySetOnClickLIstener listener = new MySetOnClickLIstener();
+        tvSetting.setOnClickListener(listener);
+    }
+
+    class MySetOnClickLIstener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.tv_person_set:
+                    startActivity(new Intent(mContext, SettingsActivity.class));
+            }
+        }
+    }
+
+    private void initView(View layout) {
+        ivAvatar = (ImageView) layout.findViewById(R.id.iv_person_avatar);
+        tvName = (TextView) layout.findViewById(R.id.tv_person_name);
+
+        tvSetting = (TextView) layout.findViewById(R.id.tv_person_set);
     }
 
     @Override
@@ -56,11 +89,14 @@ public class PersonFragment extends Fragment {
                     long start = System.currentTimeMillis();
                     EMGroupManager.getInstance().loadAllGroups();
                     EMChatManager.getInstance().loadAllConversations();
-
+                    String currentUser = EMChatManager.getInstance().getCurrentUser();
+                    Log.i("main", "当前用户是：" + currentUser);
                     String userName = FuliCenterApplication.getInstance().getUserName();
+                    Log.i("main", "当前用户名是什么？" + userName);
                     UserDao dao = new UserDao(mContext);
                     UserAvatar user = dao.getUserAvatar(userName);
                     if (user == null) {
+                        Log.i("main", "有没有啊");
                         final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
                         utils.setRequestUrl(I.REQUEST_FIND_USER)
                                 .addParam(I.User.USER_NAME,userName)
@@ -83,11 +119,13 @@ public class PersonFragment extends Fragment {
                                     }
                                 });
                     } else {
+                        Log.i("main", "这里应该有吧？" + user.toString());
+                        UserUtils.setAppCurrentUserNick(tvName);
+
                         FuliCenterApplication.getInstance().setUser(user);
                         FuliCenterApplication.currentUserNick = user.getMUserNick();
                     }
                     new DownloadContactsListTask(mContext,userName).getContacts();
-
                     long costTime = System.currentTimeMillis() - start;
                     //等待sleeptime时长
                     if (sleepTime - costTime > 0) {
@@ -98,7 +136,7 @@ public class PersonFragment extends Fragment {
                         }
                     }
                     //进入主页面
-                    startActivity(new Intent(mContext, FuliCenterMainActivity.class));
+//                    startActivity(new Intent(mContext, FuliCenterMainActivity.class));
                 }else {
                     // 因为未登陆，闪屏进入登陆界面
                     try {

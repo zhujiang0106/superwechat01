@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.easemob.fulicenter.Constant;
 import com.easemob.fulicenter.bean.UserAvatar;
@@ -369,6 +370,11 @@ public class DemoDBManager {
     synchronized public UserAvatar getUserAvatar(String userName) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from " + UserDao.USER_TABLE_NAME + " where " + UserDao.USER_COLUMN_NAME_ID + "=?", new String[]{userName});
+        if (cursor != null) {
+            Log.i("main", "cursor==" + cursor.toString());
+        } else {
+            Log.i("main", "居然是空");
+        }
         UserAvatar user = null;
         if (cursor.moveToNext()) {
             user = new UserAvatar();

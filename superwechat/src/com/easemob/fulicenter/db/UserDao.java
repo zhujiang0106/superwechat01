@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.util.Log;
 
 
 import com.easemob.fulicenter.bean.UserAvatar;

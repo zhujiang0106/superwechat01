@@ -2,6 +2,7 @@ package com.easemob.fulicenter.utils;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -63,6 +64,7 @@ public class UserUtils {
         String path = "";
         if(path != null && username != null){
             path = getUserAvatarPath(username);
+            Log.i("main", "path==" + path);
             Picasso.with(context).load(path).placeholder(R.drawable.default_avatar).into(imageView);
         }else{
             Picasso.with(context).load(R.drawable.default_avatar).into(imageView);

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.easemob.chat.EMChatManager;
@@ -36,6 +37,7 @@ public class PersonFragment extends Fragment {
     TextView tvCollectCount;
     ImageView ivAvatar;
     TextView tvName,tvSetting;
+    RelativeLayout mCollect;
     public PersonFragment() {
         // Required empty public constructor
     }
@@ -65,6 +67,7 @@ public class PersonFragment extends Fragment {
     private void setListener() {
         MySetOnClickLIstener listener = new MySetOnClickLIstener();
         tvSetting.setOnClickListener(listener);
+        mCollect.setOnClickListener(listener);
         updateCollectCountListener();
     }
 
@@ -75,6 +78,10 @@ public class PersonFragment extends Fragment {
             switch (view.getId()) {
                 case R.id.tv_person_set:
                     startActivity(new Intent(mContext, SettingsActivity.class));
+                    break;
+                case R.id.layout_person_collect_goods:
+                    startActivity(new Intent(mContext, CollectActivity.class));
+                    break;
             }
         }
     }
@@ -85,6 +92,7 @@ public class PersonFragment extends Fragment {
 
         tvSetting = (TextView) layout.findViewById(R.id.tv_person_set);
         tvCollectCount = (TextView) layout.findViewById(R.id.tv_person_good_count);
+        mCollect = (RelativeLayout) layout.findViewById(R.id.layout_person_collect_goods);
     }
 
     @Override
@@ -148,6 +156,7 @@ public class PersonFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             int count = FuliCenterApplication.getInstance().getCollectCount();
+            Log.i("main", "count==" + count);
             tvCollectCount.setText(String.valueOf(count));
         }
     }

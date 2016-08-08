@@ -30,7 +30,7 @@ public class DownloadCollectCountTask {
     public void getCollectCount() {
         final OkHttpUtils2<MessageBean> utils = new OkHttpUtils2<MessageBean>();
         utils.setRequestUrl(I.REQUEST_FIND_COLLECT_COUNT)
-                .addParam(I.Contact.USER_NAME,userName)
+                .addParam(I.Collect.USER_NAME,userName)
                 .targetClass(MessageBean.class)
                 .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
                     @Override

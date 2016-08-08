@@ -18,6 +18,7 @@ import com.easemob.fulicenter.bean.Result;
 import com.easemob.fulicenter.bean.UserAvatar;
 import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.db.UserDao;
+import com.easemob.fulicenter.task.DownloadCollectCountTask;
 import com.easemob.fulicenter.task.DownloadContactsListTask;
 import com.easemob.fulicenter.utils.I;
 import com.easemob.fulicenter.utils.Utils;
@@ -90,6 +91,7 @@ public class SplashActivity extends BaseActivity {
 						FuliCenterApplication.currentUserNick = user.getMUserNick();
 					}
 					new DownloadContactsListTask(SplashActivity.this,userName).getContacts();
+					new DownloadCollectCountTask(SplashActivity.this,userName).getCollectCount();
 
 					long costTime = System.currentTimeMillis() - start;
 					//等待sleeptime时长

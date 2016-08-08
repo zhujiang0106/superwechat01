@@ -1,7 +1,10 @@
 package com.easemob.fulicenter.activity;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -30,7 +33,7 @@ import com.easemob.fulicenter.utils.Utils;
  */
 public class PersonFragment extends Fragment {
     FuliCenterMainActivity mContext;
-
+    TextView tvCollectCount;
     ImageView ivAvatar;
     TextView tvName,tvSetting;
     public PersonFragment() {
@@ -62,6 +65,7 @@ public class PersonFragment extends Fragment {
     private void setListener() {
         MySetOnClickLIstener listener = new MySetOnClickLIstener();
         tvSetting.setOnClickListener(listener);
+        updateCollectCountListener();
     }
 
     class MySetOnClickLIstener implements View.OnClickListener {
@@ -80,6 +84,7 @@ public class PersonFragment extends Fragment {
         tvName = (TextView) layout.findViewById(R.id.tv_person_name);
 
         tvSetting = (TextView) layout.findViewById(R.id.tv_person_set);
+        tvCollectCount = (TextView) layout.findViewById(R.id.tv_person_good_count);
     }
 
     @Override
@@ -136,5 +141,27 @@ public class PersonFragment extends Fragment {
                 }
             }
         }).start();
+    }
+
+    class UpdateCollectCount extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int count = FuliCenterApplication.getInstance().getCollectCount();
+            tvCollectCount.setText(String.valueOf(count));
+        }
+    }
+
+    UpdateCollectCount mReceiver;
+    private void updateCollectCountListener() {
+        mReceiver = new UpdateCollectCount();
+        IntentFilter filter = new IntentFilter("update_collect");
+        mContext.registerReceiver(mReceiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mContext.unregisterReceiver(mReceiver);
     }
 }

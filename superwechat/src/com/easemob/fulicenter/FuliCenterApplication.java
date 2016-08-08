@@ -125,6 +125,16 @@ public class FuliCenterApplication extends Application {
 		this.userMap = userMap;
 	}
 
+	private int collectCount;
+
+	public int getCollectCount() {
+		return collectCount;
+	}
+
+	public void setCollectCount(int collectCount) {
+		this.collectCount = collectCount;
+	}
+
 	public UserAvatar getUser() {
 		return user;
 	}

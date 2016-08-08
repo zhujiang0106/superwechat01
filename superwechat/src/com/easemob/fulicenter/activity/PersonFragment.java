@@ -16,7 +16,6 @@ import com.easemob.chat.EMGroupManager;
 import com.easemob.fulicenter.DemoHXSDKHelper;
 import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
-import com.easemob.fulicenter.bean.BoutiqueBean;
 import com.easemob.fulicenter.bean.Result;
 import com.easemob.fulicenter.bean.UserAvatar;
 import com.easemob.fulicenter.data.OkHttpUtils2;
@@ -26,14 +25,11 @@ import com.easemob.fulicenter.utils.I;
 import com.easemob.fulicenter.utils.UserUtils;
 import com.easemob.fulicenter.utils.Utils;
 
-import java.util.ArrayList;
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class PersonFragment extends Fragment {
     FuliCenterMainActivity mContext;
-    private static final int sleepTime = 300;
 
     ImageView ivAvatar;
     TextView tvName,tvSetting;
@@ -46,12 +42,21 @@ public class PersonFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mContext = (FuliCenterMainActivity) getContext();
-//        View layout = View.inflate(mContext, R.layout.fragment_person, null);
         View layout = inflater.inflate(R.layout.fragment_person, container, false);
         initView(layout);
+        initData();
         setListener();
         return layout;
-//        return inflater.inflate(R.layout.fragment_person, container, false);
+    }
+
+    private void initData() {
+        String userName = FuliCenterApplication.getInstance().getUserName();
+        UserDao dao = new UserDao(mContext);
+        UserAvatar user = dao.getUserAvatar(userName);
+        if (user != null) {
+            tvName.setText(user.getMUserNick());
+        }
+        UserUtils.setAppCurrentUserAvatar(mContext, ivAvatar);
     }
 
     private void setListener() {
@@ -120,29 +125,12 @@ public class PersonFragment extends Fragment {
                                 });
                     } else {
                         Log.i("main", "这里应该有吧？" + user.toString());
-                        UserUtils.setAppCurrentUserNick(tvName);
-
                         FuliCenterApplication.getInstance().setUser(user);
                         FuliCenterApplication.currentUserNick = user.getMUserNick();
                     }
                     new DownloadContactsListTask(mContext,userName).getContacts();
-                    long costTime = System.currentTimeMillis() - start;
-                    //等待sleeptime时长
-                    if (sleepTime - costTime > 0) {
-                        try {
-                            Thread.sleep(sleepTime - costTime);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    //进入主页面
-//                    startActivity(new Intent(mContext, FuliCenterMainActivity.class));
                 }else {
                     // 因为未登陆，闪屏进入登陆界面
-                    try {
-                        Thread.sleep(sleepTime);
-                    } catch (InterruptedException e) {
-                    }
                     startActivity(new Intent(mContext, FuliLoginActivity.class));
                     mContext.finish();
                 }

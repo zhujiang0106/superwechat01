@@ -1,6 +1,6 @@
 package com.easemob.fulicenter.activity;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 
+import com.easemob.fulicenter.DemoHXSDKHelper;
 import com.easemob.fulicenter.R;
 
 public class FuliCenterMainActivity extends BaseActivity implements View.OnClickListener{
@@ -24,6 +25,8 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
 
     private int index;
     private int currentIndex;
+
+    public static final int ACTION = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,10 +83,19 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
                 setDrawable(btnCart, R.drawable.menu_item_cart_selected, Color.BLACK);
                 break;
             case R.id.btnPersonal:
-                index = 3;
                 setDrawable(btnPersonal, R.drawable.menu_item_personal_center_selected, Color.BLACK);
+                index = 3;
+                /*if (DemoHXSDKHelper.getInstance().isLogined()) {
+                } else {
+//                    startActivity(new Intent(this, FuliLoginActivity.class));
+                    startActivityForResult(new Intent(this,FuliLoginActivity.class),ACTION);
+                }*/
                 break;
         }
+        setFragment();
+    }
+
+    private void setFragment() {
         if (currentIndex != index) {
             mTransaction = getSupportFragmentManager().beginTransaction();
             mTransaction.hide(fragments[currentIndex]);
@@ -109,4 +121,30 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
         drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
         button.setCompoundDrawables(null,drawable,null,null);
     }
+
+  /*  @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ACTION) {
+            if (DemoHXSDKHelper.getInstance().isLogined()) {
+
+            } else {
+//                currentIndex = 3;
+            }
+        }
+    }*/
+
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+        if (DemoHXSDKHelper.getInstance().isLogined()) {
+
+        } else {
+            index = currentIndex;
+            if (index == 3) {
+                index = 0;
+            }
+            setFragment();
+        }
+    }*/
 }

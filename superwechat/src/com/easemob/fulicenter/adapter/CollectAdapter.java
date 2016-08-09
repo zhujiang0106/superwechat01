@@ -17,6 +17,7 @@ import com.easemob.fulicenter.activity.GoodDetailsActivity;
 import com.easemob.fulicenter.bean.CollectBean;
 import com.easemob.fulicenter.bean.MessageBean;
 import com.easemob.fulicenter.data.OkHttpUtils2;
+import com.easemob.fulicenter.task.DownloadCollectCountTask;
 import com.easemob.fulicenter.utils.I;
 import com.easemob.fulicenter.utils.ImageUtils;
 import com.easemob.fulicenter.viewholder.FooterViewHolder;
@@ -108,6 +109,9 @@ public class CollectAdapter extends Adapter<ViewHolder> {
                                 @Override
                                 public void onSuccess(MessageBean result) {
                                     if (result.isSuccess()) {
+                                        mCollectList.remove(good);
+                                        new DownloadCollectCountTask(mContext, FuliCenterApplication.getInstance().getUserName()).getCollectCount();
+                                        notifyDataSetChanged();
                                         Toast.makeText(mContext, "已经删除！", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(mContext, "删除失败！", Toast.LENGTH_SHORT).show();

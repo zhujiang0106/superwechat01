@@ -11,12 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easemob.fulicenter.D;
+import com.easemob.fulicenter.DemoHXSDKHelper;
 import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.bean.Albums;
 import com.easemob.fulicenter.bean.GoodDetailsBean;
 import com.easemob.fulicenter.bean.MessageBean;
 import com.easemob.fulicenter.data.OkHttpUtils2;
+import com.easemob.fulicenter.task.DownloadCollectCountTask;
 import com.easemob.fulicenter.utils.I;
 import com.easemob.fulicenter.viewholder.FlowIndicator;
 import com.easemob.fulicenter.viewholder.SlideAutoLoopView;
@@ -35,12 +37,42 @@ public class GoodDetailsActivity extends Activity {
     int mGoodId;
     GoodDetailsActivity mContext;
 
+    boolean isCollect;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_good_details);
         initView();
         initData();
+        initCollect();
+    }
+
+    private void initCollect() {
+        if (DemoHXSDKHelper.getInstance().isLogined()) {
+            OkHttpUtils2<MessageBean> utils = new OkHttpUtils2<MessageBean>();
+            utils.setRequestUrl(I.REQUEST_IS_COLLECT)
+                    .addParam(I.Collect.USER_NAME,FuliCenterApplication.getInstance().getUserName())
+                    .addParam(I.Collect.GOODS_ID, String.valueOf(mGoodId))
+                    .targetClass(MessageBean.class)
+                    .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean result) {
+                            if (result != null && result.isSuccess()) {
+                                isCollect = true;
+                                ivCollect.setImageResource(R.drawable.bg_collect_out);
+                            } else {
+                                isCollect = false;
+                                ivCollect.setImageResource(R.drawable.bg_collect_in);
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
+
+                        }
+                    });
+        }
     }
 
     private void addCollectListener(final GoodDetailsBean result) {
@@ -48,35 +80,50 @@ public class GoodDetailsActivity extends Activity {
             @Override
             public void onClick(View view) {
                 String userName = FuliCenterApplication.getInstance().getUserName();
-                if (userName != null) {
-                    OkHttpUtils2<MessageBean> utils = new OkHttpUtils2<MessageBean>();
-                    utils.setRequestUrl(I.REQUEST_ADD_COLLECT)
-                            .addParam(I.Collect.USER_NAME,userName)
-                            .addParam(I.Collect.GOODS_ID, String.valueOf(result.getGoodsId()))
-                            .addParam(I.Collect.GOODS_NAME,result.getGoodsName())
-                            .addParam(I.Collect.GOODS_ENGLISH_NAME,result.getGoodsEnglishName())
-                            .addParam(I.Collect.GOODS_THUMB,result.getGoodsThumb())
-                            .addParam(I.Collect.GOODS_IMG,result.getGoodsImg())
-                            .addParam(I.Collect.ADD_TIME, String.valueOf(result.getAddTime()))
-                            .targetClass(MessageBean.class)
-                            .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
-                                @Override
-                                public void onSuccess(MessageBean result) {
-                                    if (result.isSuccess()) {
-                                        Toast.makeText(mContext, "添加收藏成功", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(mContext, "添加收藏失败", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onError(String error) {
-                                    Toast.makeText(mContext, "添加收藏失败", Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                if (DemoHXSDKHelper.getInstance().isLogined()) {
+                    if (!isCollect) {
+                        addCollct(userName, result);
+                    } else {
+                        Toast.makeText(mContext,"该商品已经在收藏列表",Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(mContext,"请先登录！",Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void addCollct(String userName,GoodDetailsBean result) {
+        if (userName != null) {
+            OkHttpUtils2<MessageBean> utils = new OkHttpUtils2<MessageBean>();
+            utils.setRequestUrl(I.REQUEST_ADD_COLLECT)
+                    .addParam(I.Collect.USER_NAME, userName)
+                    .addParam(I.Collect.GOODS_ID, String.valueOf(result.getGoodsId()))
+                    .addParam(I.Collect.GOODS_NAME, result.getGoodsName())
+                    .addParam(I.Collect.GOODS_ENGLISH_NAME, result.getGoodsEnglishName())
+                    .addParam(I.Collect.GOODS_THUMB, result.getGoodsThumb())
+                    .addParam(I.Collect.GOODS_IMG, result.getGoodsImg())
+                    .addParam(I.Collect.ADD_TIME, String.valueOf(result.getAddTime()))
+                    .targetClass(MessageBean.class)
+                    .execute(new OkHttpUtils2.OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean result) {
+                            if (result!=null&&result.isSuccess()) {
+                                new DownloadCollectCountTask(mContext, FuliCenterApplication.getInstance().getUserName()).getCollectCount();
+                                ivCollect.setImageResource(R.drawable.bg_collect_out);
+                                isCollect = true;
+                                Toast.makeText(mContext, "添加收藏成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(mContext, "添加收藏失败", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Toast.makeText(mContext, "添加收藏失败", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 
     private void initData() {

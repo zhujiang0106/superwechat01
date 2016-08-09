@@ -3,6 +3,7 @@ package com.easemob.fulicenter.utils;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -10,11 +11,15 @@ import com.easemob.applib.controller.HXSDKHelper;
 import com.easemob.fulicenter.DemoHXSDKHelper;
 import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
+import com.easemob.fulicenter.bean.CartBean;
+import com.easemob.fulicenter.bean.GoodDetailsBean;
 import com.easemob.fulicenter.bean.MemberUserAvatar;
 import com.easemob.fulicenter.bean.UserAvatar;
+import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.domain.User;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UserUtils {
@@ -180,5 +185,49 @@ public class UserUtils {
         } else {
             view.setText(member.getMUserName());
         }
+    }
+
+    public static void getCartList(int pageId, final ArrayList<CartBean> cartList) {
+        OkHttpUtils2<CartBean[]> utils = new OkHttpUtils2<CartBean[]>();
+        utils.setRequestUrl(I.REQUEST_FIND_CARTS)
+                .addParam(I.Cart.USER_NAME,String.valueOf(FuliCenterApplication.getInstance().getUserName()))
+                .addParam(I.PAGE_ID,String.valueOf(pageId))
+                .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))
+                .targetClass(CartBean[].class)
+                .execute(new OkHttpUtils2.OnCompleteListener<CartBean[]>() {
+                    @Override
+                    public void onSuccess(CartBean[] result) {
+                        Log.i("main", "result=" + result);
+                        if (result != null) {
+                            final ArrayList<CartBean> cartArrayList = Utils.array2List(result);
+                            Log.i("main", "从服务端下载的购物车商品信息：" + cartArrayList.toString());
+//                            final ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+                            for (final CartBean cartBean : cartArrayList) {
+                                OkHttpUtils2<GoodDetailsBean> utils = new OkHttpUtils2<GoodDetailsBean>();
+                                utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
+                                        .addParam(I.Cart.GOODS_ID, String.valueOf(cartBean.getGoodsId()))
+                                        .targetClass(GoodDetailsBean.class)
+                                        .execute(new OkHttpUtils2.OnCompleteListener<GoodDetailsBean>() {
+                                            @Override
+                                            public void onSuccess(GoodDetailsBean result) {
+                                                if (result != null) {
+                                                    cartBean.setGoods(result);
+                                                    cartList.add(cartBean);
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onError(String error) {
+
+                                            }
+                                        });
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                    }
+                });
     }
 }

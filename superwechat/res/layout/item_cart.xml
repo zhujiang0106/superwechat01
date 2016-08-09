@@ -1,86 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="72dp"
     android:background="@color/white"
     android:layout_margin="5dp"
     android:id="@+id/layout_cart">
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="72dp">
-        <RelativeLayout
-            android:id="@+id/layout_cart_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/iv_cart_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/checkbox_normal"
-                android:layout_centerVertical="true"
-                android:padding="14dp"/>
-        </RelativeLayout>
+        android:id="@+id/layout_cart_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
         <ImageView
-            android:id="@+id/iv_cart_thumb"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:src="@drawable/nopic"
-            android:layout_toRightOf="@id/layout_cart_checkbox"
-            android:layout_marginLeft="12dp"
-            android:scaleType="fitXY"
-            android:layout_gravity="center"/>
-        <TextView
-            android:id="@+id/tv_cart_name"
+            android:id="@+id/iv_cart_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="为什么是一个true"
-            android:textColor="@color/cart_buy_bg"
-            android:layout_toRightOf="@id/iv_cart_thumb"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="12dp"/>
-        <ImageView
-            android:id="@+id/iv_cart_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/iv_cart_thumb"
-            android:layout_below="@id/tv_cart_name"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/add_cart"/>
-        <TextView
-            android:id="@+id/tv_cart_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="(2)"
-            android:textColor="@color/bluebg"
-            android:layout_toRightOf="@id/iv_cart_add"
-            android:layout_below="@id/tv_cart_name"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="12dp"/>
-        <ImageView
-            android:id="@+id/iv_cart_del"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/tv_cart_count"
-            android:layout_below="@id/tv_cart_name"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/del_cart"/>
-        <TextView
-            android:id="@+id/tv_cart_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:src="@drawable/checkbox_normal"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:text="$419"
-            android:textColor="@color/item_good_price"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="12dp"/>
+            android:padding="14dp"/>
     </RelativeLayout>
-
-</LinearLayout>
+    <ImageView
+        android:id="@+id/iv_cart_thumb"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/nopic"
+        android:layout_toRightOf="@id/layout_cart_checkbox"
+        android:layout_marginLeft="12dp"
+        android:scaleType="fitXY"
+        android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/tv_cart_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="为什么是一个true"
+        android:textColor="@color/cart_buy_bg"
+        android:layout_toRightOf="@id/iv_cart_thumb"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"/>
+    <ImageView
+        android:id="@+id/iv_cart_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_cart_thumb"
+        android:layout_below="@id/tv_cart_name"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/add_cart"/>
+    <TextView
+        android:id="@+id/tv_cart_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(2)"
+        android:textColor="@color/bluebg"
+        android:layout_toRightOf="@id/iv_cart_add"
+        android:layout_below="@id/tv_cart_name"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"/>
+    <ImageView
+        android:id="@+id/iv_cart_del"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_cart_count"
+        android:layout_below="@id/tv_cart_name"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/del_cart"/>
+    <TextView
+        android:id="@+id/tv_cart_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:text="$419"
+        android:textColor="@color/item_good_price"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"/>
+</RelativeLayout>

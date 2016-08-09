@@ -17,10 +17,12 @@ import android.app.Application;
 import android.content.Context;
 
 import com.easemob.EMCallBack;
+import com.easemob.fulicenter.bean.CartBean;
 import com.easemob.fulicenter.bean.UserAvatar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FuliCenterApplication extends Application {
@@ -119,6 +121,16 @@ public class FuliCenterApplication extends Application {
 
 	public Map<String, UserAvatar> getUserMap() {
 		return userMap;
+	}
+
+	private ArrayList<CartBean> cartList = new ArrayList<CartBean>();
+
+	public ArrayList<CartBean> getCartList() {
+		return cartList;
+	}
+
+	public void setCartList(ArrayList<CartBean> cartList) {
+		this.cartList = cartList;
 	}
 
 	public void setUserMap(Map<String, UserAvatar> userMap) {

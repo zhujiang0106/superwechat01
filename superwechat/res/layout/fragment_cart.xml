@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_gray_light"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/list_background">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerInParent="true">
+            <TextView
+                android:id="@+id/tv_cart_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="合计：￥888"
+                android:textColor="@color/ebpay_text_blue"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/tv_cart_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="节省：￥222"
+                android:textColor="@color/ebpay_text_blue"
+                android:textSize="14sp"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/btn_cart_buy"
+            android:layout_width="86dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:text="购买"
+            android:textColor="@color/white"
+            android:background="@drawable/tb_btn_login_orange_normal"/>
+
+    </RelativeLayout>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_cart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/list_background">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include layout="@layout/common_refresh_hint" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_cart"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>

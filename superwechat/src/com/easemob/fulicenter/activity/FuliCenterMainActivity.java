@@ -19,6 +19,7 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
     PersonFragment mPersonFragment;
+    CartFragment mCartFragment;
 
     FragmentTransaction mTransaction;
     private Fragment[] fragments;
@@ -55,7 +56,8 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
         mBoutiqueFragment = new BoutiqueFragment();
         mCategoryFragment = new CategoryFragment();
         mPersonFragment = new PersonFragment();
-        fragments = new Fragment[]{mNewGoodsFragment, mBoutiqueFragment, mCategoryFragment,mPersonFragment};
+        mCartFragment = new CartFragment();
+        fragments = new Fragment[]{mNewGoodsFragment, mBoutiqueFragment, mCategoryFragment,mCartFragment,mPersonFragment};
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, mNewGoodsFragment)
                 .add(R.id.fragment_container, mBoutiqueFragment).hide(mBoutiqueFragment)
@@ -80,11 +82,12 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
                 index = 2;
                 break;
             case R.id.btnCart:
+                index = 3;
                 setDrawable(btnCart, R.drawable.menu_item_cart_selected, Color.BLACK);
                 break;
             case R.id.btnPersonal:
+                index = 4;
                 setDrawable(btnPersonal, R.drawable.menu_item_personal_center_selected, Color.BLACK);
-                index = 3;
                 /*if (DemoHXSDKHelper.getInstance().isLogined()) {
                 } else {
 //                    startActivity(new Intent(this, FuliLoginActivity.class));

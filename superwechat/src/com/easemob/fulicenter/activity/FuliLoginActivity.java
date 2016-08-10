@@ -27,6 +27,7 @@ import com.easemob.fulicenter.bean.UserAvatar;
 import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.db.UserDao;
 import com.easemob.fulicenter.domain.User;
+import com.easemob.fulicenter.task.DownloadCartListTask;
 import com.easemob.fulicenter.task.DownloadCollectCountTask;
 import com.easemob.fulicenter.task.DownloadContactsListTask;
 import com.easemob.fulicenter.utils.CommonUtils;
@@ -234,6 +235,7 @@ public class FuliLoginActivity extends Activity {
 
         new DownloadContactsListTask(FuliLoginActivity.this,currentUsername).getContacts();
         new DownloadCollectCountTask(FuliLoginActivity.this,currentUsername).getCollectCount();
+        new DownloadCartListTask(FuliLoginActivity.this,currentUsername).getCartList();
         try {
             // ** 第一次登录或者之前logout后再登录，加载所有本地群和回话
             // ** manually load all local groups and

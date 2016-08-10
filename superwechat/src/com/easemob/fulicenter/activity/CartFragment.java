@@ -59,13 +59,13 @@ public class CartFragment extends Fragment {
         mCartList = new ArrayList<CartBean>();
         initView(layout);
         initData();
-//        setListener();
+        setListener();
         return layout;
     }
 
     private void setListener() {
         setPullDownRefreshListener();
-        setPullUpRefreshListener();
+//        setPullUpRefreshListener();
     }
 
     private void setPullUpRefreshListener() {
@@ -79,7 +79,6 @@ public class CartFragment extends Fragment {
                         ) {
                     if (mCartAdapter.isMore()) {
                         pageId++;
-//                        findNewGoodList(I.ACTION_PULL_UP,pageId);
                     }
                 }
             }
@@ -96,23 +95,18 @@ public class CartFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                tvHint.setVisibility(View.VISIBLE);
-                pageId = 1;
-//                findNewGoodList(I.ACTION_PULL_DOWN,pageId);
+                ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+                mCartAdapter.initData(cartList);
+                tvHint.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }
 
     private void initData() {
         ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
-        if (cartList == null || cartList.size() == 0) {
-            UserUtils.getCartList(pageId,cartList);
-        }
+        Log.i("main", "最新的cartList：" + cartList);
         mCartAdapter.initData(cartList);
-        mCartAdapter.setFooterText(getResources().getString(R.string.load_more));
-
-
-//        findNewGoodList(I.ACTION_DOWNLOAD,pageId);
     }
     /*private void findNewGoodList(final int action, int pageid) {
         OkHttpUtils2<CartBean[]> utils = new OkHttpUtils2<CartBean[]>();

@@ -5,32 +5,32 @@
     android:background="@color/white"
     android:layout_margin="5dp"
     android:id="@+id/layout_cart">
-    <RelativeLayout
-        android:id="@+id/layout_cart_checkbox"
+    <CheckBox
+        android:id="@+id/cb_cart_checkbox"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/iv_cart_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/checkbox_normal"
-            android:layout_centerVertical="true"
-            android:padding="14dp"/>
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        style="@style/CustomCheckboxTheme"
+        android:checked="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:padding="5dp"/>
+
     <ImageView
         android:id="@+id/iv_cart_thumb"
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:src="@drawable/nopic"
-        android:layout_toRightOf="@id/layout_cart_checkbox"
-        android:layout_marginLeft="12dp"
+        android:layout_toRightOf="@id/cb_cart_checkbox"
         android:scaleType="fitXY"
         android:layout_gravity="center"/>
     <TextView
         android:id="@+id/tv_cart_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="为什么是一个true"
+        android:lines="1"
+        android:ellipsize="end"
+        android:paddingRight="60dp"
+        android:text="为什么是一个true为什么是一个true为什么是一个true"
         android:textColor="@color/cart_buy_bg"
         android:layout_toRightOf="@id/iv_cart_thumb"
         android:textSize="16sp"

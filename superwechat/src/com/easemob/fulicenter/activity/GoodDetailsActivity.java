@@ -7,6 +7,7 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,14 +16,18 @@ import com.easemob.fulicenter.DemoHXSDKHelper;
 import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.bean.Albums;
+import com.easemob.fulicenter.bean.CartBean;
 import com.easemob.fulicenter.bean.GoodDetailsBean;
 import com.easemob.fulicenter.bean.MessageBean;
 import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.task.DownloadCollectCountTask;
+import com.easemob.fulicenter.task.UpdateCartTask;
 import com.easemob.fulicenter.utils.I;
 import com.easemob.fulicenter.utils.UserUtils;
 import com.easemob.fulicenter.viewholder.FlowIndicator;
 import com.easemob.fulicenter.viewholder.SlideAutoLoopView;
+
+import java.util.ArrayList;
 
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
@@ -30,6 +35,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 public class GoodDetailsActivity extends Activity {
     ImageView ivShare,ivCollect, ivCart;
     TextView tvCartCount;
+    RelativeLayout mLayoutCart;
 
     TextView tvGoodNameEng,tvGoodNameChi,tvGoodPriceShop, tvGoodPriceCurrent;
 
@@ -60,6 +66,33 @@ public class GoodDetailsActivity extends Activity {
                 showShare();
             }
         });
+        mLayoutCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addCart();
+            }
+        });
+    }
+
+    private void addCart() {
+        final ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+        CartBean cartBean = new CartBean();
+        for (CartBean cart : cartList) {
+            int id = cart.getGoods().getId();
+            if (id == mGoodId) {
+                cart.setCount(cart.getCount()+1);
+                new UpdateCartTask(mContext, cart, false).updareCart();
+            }
+        }
+        cartBean.setCount(1);
+        cartBean.setChecked(true);
+        cartBean.setGoodsId(mGoodId);
+        cartBean.setUserName(FuliCenterApplication.getInstance().getUserName());
+        Log.i("main", "101010101010");
+        UserUtils.setGoodToCart(cartBean,mGoodId);
+        Log.i("main", "202020202020");
+        Log.i("main", "2020cartBean==" + cartBean.toString());
+        new UpdateCartTask(mContext, cartBean, false).updareCart();
     }
 
     private void initCollect() {
@@ -216,6 +249,7 @@ public class GoodDetailsActivity extends Activity {
     }
 
     private void initView() {
+        mLayoutCart = (RelativeLayout) findViewById(R.id.layout_good_details_cart);
         ivShare = (ImageView) findViewById(R.id.iv_good_share);
         ivCollect = (ImageView) findViewById(R.id.iv_good_collect);
         ivCart = (ImageView) findViewById(R.id.iv_good_cart);

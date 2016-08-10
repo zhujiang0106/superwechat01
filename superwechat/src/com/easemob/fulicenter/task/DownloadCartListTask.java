@@ -43,6 +43,7 @@ public class DownloadCartListTask {
                             final ArrayList<CartBean> cartArrayList = Utils.array2List(result);
                             Log.i("main", "从服务端下载的购物车商品信息：" + cartArrayList.toString());
                             final ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+                            final ArrayList<GoodDetailsBean> cartGoodList = FuliCenterApplication.getInstance().getCartGoodList();
                             for (final CartBean cartBean : cartArrayList) {
                                 OkHttpUtils2<GoodDetailsBean> utils = new OkHttpUtils2<GoodDetailsBean>();
                                 utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
@@ -54,6 +55,9 @@ public class DownloadCartListTask {
                                                 if (result != null) {
                                                     cartBean.setGoods(result);
                                                     cartList.add(cartBean);
+                                                    if (cartBean.isChecked()) {
+                                                        cartGoodList.add(result);
+                                                    }
                                                 }
                                             }
 

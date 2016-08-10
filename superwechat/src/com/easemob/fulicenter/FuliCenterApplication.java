@@ -18,8 +18,10 @@ import android.content.Context;
 
 import com.easemob.EMCallBack;
 import com.easemob.fulicenter.bean.CartBean;
+import com.easemob.fulicenter.bean.GoodDetailsBean;
 import com.easemob.fulicenter.bean.UserAvatar;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,6 +126,16 @@ public class FuliCenterApplication extends Application {
 	}
 
 	private ArrayList<CartBean> cartList = new ArrayList<CartBean>();
+
+	private ArrayList<GoodDetailsBean> cartGoodList = new ArrayList<GoodDetailsBean>();
+
+	public ArrayList<GoodDetailsBean> getCartGoodList() {
+		return cartGoodList;
+	}
+
+	public void setCartGoodList(ArrayList<GoodDetailsBean> cartGoodList) {
+		this.cartGoodList = cartGoodList;
+	}
 
 	public ArrayList<CartBean> getCartList() {
 		return cartList;

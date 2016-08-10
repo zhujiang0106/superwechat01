@@ -1,6 +1,7 @@
 package com.easemob.fulicenter.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.bean.CartBean;
+import com.easemob.fulicenter.bean.GoodDetailsBean;
+import com.easemob.fulicenter.task.UpdateCartTask;
 import com.easemob.fulicenter.utils.ImageUtils;
 
 import java.util.ArrayList;
@@ -27,6 +31,8 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context mContext;
     List<CartBean> mCartList;
     CartViewHolder mCartViewHolder;
+
+    boolean isChanged;
 
     boolean isMore;
 
@@ -61,8 +67,33 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Log.i("main", "现在的mCartList的大小是==" + mCartList.size());
             ImageUtils.setGoodThumb(mContext, mCartViewHolder.ivCartThumb, cart.getGoods().getGoodsThumb());
             mCartViewHolder.tvCartName.setText(cart.getGoods().getGoodsName());
-            mCartViewHolder.tvCartPrice.setText("￥" + getSumPrice(position));
+            mCartViewHolder.tvCartPrice.setText(cart.getGoods().getRankPrice());
             mCartViewHolder.tvCartCount.setText("("+cart.getCount()+")");
+            mCartViewHolder.cbCartSelect.setChecked(cart.isChecked());
+            mCartViewHolder.cbCartSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    cart.setChecked(isChecked);
+                    isChanged = true;
+                    new UpdateCartTask(mContext,cart,isChanged).updareCart();
+                }
+            });
+            mCartViewHolder.ivCountAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cart.setCount(cart.getCount()+1);
+                    isChanged = false;
+                    new UpdateCartTask(mContext, cart,isChanged).updareCart();
+                }
+            });
+            mCartViewHolder.ivCountDel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cart.setCount(cart.getCount()-1);
+                    isChanged = false;
+                    new UpdateCartTask(mContext, cart,isChanged).updareCart();
+                }
+            });
         }
     }
 
@@ -83,20 +114,9 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    private int getSumPrice(int position) {
-        int sumPrice = 0;
-        ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
-        CartBean cartBean = cartList.get(position);
-        int count = cartBean.getCount();
-        String str = cartBean.getGoods().getRankPrice();
-        int price = Integer.parseInt(str.substring(1));
-        sumPrice = price * count;
-        return sumPrice;
-    }
-
     private class CartViewHolder extends ViewHolder {
         RelativeLayout layout;
-        ImageView ivCartThumb;
+        ImageView ivCartThumb,ivCountAdd,ivCountDel;
         CheckBox cbCartSelect;
         TextView tvCartName,tvCartCount,tvCartPrice;
         public CartViewHolder(View view) {
@@ -107,6 +127,8 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvCartName = (TextView) view.findViewById(R.id.tv_cart_name);
             tvCartCount = (TextView) view.findViewById(R.id.tv_cart_count);
             tvCartPrice = (TextView) view.findViewById(R.id.tv_cart_price);
+            ivCountAdd = (ImageView) view.findViewById(R.id.iv_cart_add);
+            ivCountDel = (ImageView) view.findViewById(R.id.iv_cart_del);
         }
     }
 }

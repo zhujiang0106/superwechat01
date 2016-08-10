@@ -1,6 +1,10 @@
 package com.easemob.fulicenter.activity;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.easemob.fulicenter.D;
+import com.easemob.fulicenter.DemoHXSDKHelper;
 import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.adapter.CartAdapter;
@@ -68,6 +73,17 @@ public class CartFragment extends Fragment {
     private void setListener() {
         setPullDownRefreshListener();
 //        setPullUpRefreshListener();
+        setUpdateListener();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!DemoHXSDKHelper.getInstance().isLogined()) {
+            // 因为未登陆，闪屏进入登陆界面
+            startActivity(new Intent(mContext, FuliLoginActivity.class));
+            mContext.finish();
+        }
     }
 
     private void setPullUpRefreshListener() {
@@ -180,4 +196,26 @@ public class CartFragment extends Fragment {
 
     }
 
+    class MyBroadCastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initData();
+        }
+    }
+
+    MyBroadCastReceiver mMyBroadCastReceiver;
+
+    private void setUpdateListener() {
+        mMyBroadCastReceiver = new MyBroadCastReceiver();
+        IntentFilter filter = new IntentFilter("update_cart_list");
+        mContext.registerReceiver(mMyBroadCastReceiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mMyBroadCastReceiver != null) {
+            mContext.unregisterReceiver(mMyBroadCastReceiver);
+        }
+    }
 }

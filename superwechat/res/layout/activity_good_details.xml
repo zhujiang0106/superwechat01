@@ -26,6 +26,7 @@
             android:padding="5dp"
             android:src="@drawable/bg_collect_in"/>
         <RelativeLayout
+            android:id="@+id/layout_good_details_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"

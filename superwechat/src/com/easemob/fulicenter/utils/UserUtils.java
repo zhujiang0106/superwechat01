@@ -197,26 +197,58 @@ public class UserUtils {
         return num;
     }
 
+    // 获取所有购物车选中商品的总价
     public static int getCartCurrencyPrice() {
         int sumCurrencyPrice = 0;
         ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+        ArrayList<GoodDetailsBean> cartGoodList = FuliCenterApplication.getInstance().getCartGoodList();
+        Log.i("main", "这个商品集合的数量是多少？" + cartGoodList.size());
         for (CartBean cartBean : cartList) {
             int count = cartBean.getCount();
-            String str = cartBean.getGoods().getCurrencyPrice();
-            int price = Integer.parseInt(str.substring(1));
-            sumCurrencyPrice += price * count;
+            GoodDetailsBean good = cartBean.getGoods();
+            if (cartGoodList.contains(good)) {
+                String str = good.getCurrencyPrice();
+                int price = Integer.parseInt(str.substring(1));
+                sumCurrencyPrice += price * count;
+            }
         }
         return sumCurrencyPrice;
     }
+    // 获取所有购物车选中商品的折后总价
     public static int getCartRankPrice() {
         int sumRankPrice = 0;
         ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+        ArrayList<GoodDetailsBean> cartGoodList = FuliCenterApplication.getInstance().getCartGoodList();
         for (CartBean cartBean : cartList) {
             int count = cartBean.getCount();
-            String str = cartBean.getGoods().getRankPrice();
-            int price = Integer.parseInt(str.substring(1));
-            sumRankPrice += price * count;
+            GoodDetailsBean good = cartBean.getGoods();
+            if (cartGoodList.contains(good)) {
+                String str = good.getRankPrice();
+                int price = Integer.parseInt(str.substring(1));
+                sumRankPrice += price * count;
+            }
         }
         return sumRankPrice;
+    }
+
+    public static void setGoodToCart(final CartBean cart, int goodId) {
+
+        OkHttpUtils2<GoodDetailsBean> utils = new OkHttpUtils2<GoodDetailsBean>();
+        utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
+                .addParam(I.Cart.GOODS_ID, String.valueOf(goodId))
+                .targetClass(GoodDetailsBean.class)
+                .execute(new OkHttpUtils2.OnCompleteListener<GoodDetailsBean>() {
+                    @Override
+                    public void onSuccess(GoodDetailsBean result) {
+                        if (result != null) {
+                            cart.setGoods(result);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
     }
 }

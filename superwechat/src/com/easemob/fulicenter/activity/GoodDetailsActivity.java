@@ -20,6 +20,7 @@ import com.easemob.fulicenter.bean.MessageBean;
 import com.easemob.fulicenter.data.OkHttpUtils2;
 import com.easemob.fulicenter.task.DownloadCollectCountTask;
 import com.easemob.fulicenter.utils.I;
+import com.easemob.fulicenter.utils.UserUtils;
 import com.easemob.fulicenter.viewholder.FlowIndicator;
 import com.easemob.fulicenter.viewholder.SlideAutoLoopView;
 
@@ -147,6 +148,17 @@ public class GoodDetailsActivity extends Activity {
         } else {
             finish();
             Toast.makeText(mContext,"获取商品详情数据失败！",Toast.LENGTH_SHORT).show();
+        }
+        setCartCount();
+    }
+
+    private void setCartCount() {
+        int count = UserUtils.getCartCount();
+        Log.i("main", "购物车的数量是："+count);
+        if (DemoHXSDKHelper.getInstance().isLogined() && count > 0) {
+            tvCartCount.setText(String.valueOf(count));
+        } else {
+            tvCartCount.setVisibility(View.GONE);
         }
     }
 

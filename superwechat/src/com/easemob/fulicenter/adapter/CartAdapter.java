@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
 import com.easemob.fulicenter.bean.CartBean;
 import com.easemob.fulicenter.utils.ImageUtils;
@@ -60,7 +61,8 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Log.i("main", "现在的mCartList的大小是==" + mCartList.size());
             ImageUtils.setGoodThumb(mContext, mCartViewHolder.ivCartThumb, cart.getGoods().getGoodsThumb());
             mCartViewHolder.tvCartName.setText(cart.getGoods().getGoodsName());
-            mCartViewHolder.tvCartPrice.setText(cart.getGoods().getCurrencyPrice());
+//            mCartViewHolder.tvCartPrice.setText(cart.getGoods().getRankPrice());
+            mCartViewHolder.tvCartPrice.setText(String.valueOf(getSumPrice(position)));
             mCartViewHolder.tvCartCount.setText("("+cart.getCount()+")");
         }
     }
@@ -80,6 +82,17 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void addData(ArrayList<CartBean> cart) {
         mCartList.addAll(cart);
         notifyDataSetChanged();
+    }
+
+    private int getSumPrice(int position) {
+        int sumPrice = 0;
+        ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+        CartBean cartBean = cartList.get(position);
+        int count = cartBean.getCount();
+        String str = cartBean.getGoods().getRankPrice();
+        int price = Integer.parseInt(str.substring(1));
+        sumPrice = price * count;
+        return sumPrice;
     }
 
     private class CartViewHolder extends ViewHolder {

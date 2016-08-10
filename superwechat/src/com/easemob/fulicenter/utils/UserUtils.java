@@ -230,4 +230,14 @@ public class UserUtils {
                     }
                 });
     }
+
+    public static int getCartCount() {
+        int num = 0;
+        ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+        for (CartBean cart : cartList) {
+            int count = cart.getCount();
+            num += count;
+        }
+        return num;
+    }
 }

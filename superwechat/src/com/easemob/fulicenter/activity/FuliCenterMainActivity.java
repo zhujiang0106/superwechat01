@@ -7,11 +7,18 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.easemob.fulicenter.DemoHXSDKHelper;
+import com.easemob.fulicenter.FuliCenterApplication;
 import com.easemob.fulicenter.R;
+import com.easemob.fulicenter.bean.CartBean;
+import com.easemob.fulicenter.utils.UserUtils;
+
+import java.util.ArrayList;
 
 public class FuliCenterMainActivity extends BaseActivity implements View.OnClickListener{
     Button btnNewGoods,btnBoutique,btnCategory,btnCart,btnPersonal;
@@ -24,6 +31,8 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
     FragmentTransaction mTransaction;
     private Fragment[] fragments;
 
+    TextView tvCartCount;
+
     private int index;
     private int currentIndex;
 
@@ -34,9 +43,21 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fuli_center_main);
         initView();
+        initData();
         setDrawable(btnNewGoods, R.drawable.menu_item_new_good_selected, Color.BLACK);
         setListener();
     }
+
+    private void initData() {
+        int count = UserUtils.getCartCount();
+        Log.i("main", "购物车的数量是："+count);
+        if (DemoHXSDKHelper.getInstance().isLogined() && count > 0) {
+            tvCartCount.setText(String.valueOf(count));
+        } else {
+            tvCartCount.setVisibility(View.GONE);
+        }
+    }
+
     private void setListener() {
         btnNewGoods.setOnClickListener(this);
         btnBoutique.setOnClickListener(this);
@@ -51,6 +72,8 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
         btnCategory = (Button) findViewById(R.id.btnCategory);
         btnCart = (Button) findViewById(R.id.btnCart);
         btnPersonal = (Button) findViewById(R.id.btnPersonal);
+
+        tvCartCount = (TextView) findViewById(R.id.tv_main_cart_count);
 
         mNewGoodsFragment = new NewGoodsFragment();
         mBoutiqueFragment = new BoutiqueFragment();

@@ -187,50 +187,6 @@ public class UserUtils {
         }
     }
 
-    public static void getCartList(int pageId, final ArrayList<CartBean> cartList) {
-        OkHttpUtils2<CartBean[]> utils = new OkHttpUtils2<CartBean[]>();
-        utils.setRequestUrl(I.REQUEST_FIND_CARTS)
-                .addParam(I.Cart.USER_NAME,String.valueOf(FuliCenterApplication.getInstance().getUserName()))
-                .addParam(I.PAGE_ID,String.valueOf(pageId))
-                .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))
-                .targetClass(CartBean[].class)
-                .execute(new OkHttpUtils2.OnCompleteListener<CartBean[]>() {
-                    @Override
-                    public void onSuccess(CartBean[] result) {
-                        Log.i("main", "result=" + result);
-                        if (result != null) {
-                            final ArrayList<CartBean> cartArrayList = Utils.array2List(result);
-                            Log.i("main", "从服务端下载的购物车商品信息：" + cartArrayList.toString());
-//                            final ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
-                            for (final CartBean cartBean : cartArrayList) {
-                                OkHttpUtils2<GoodDetailsBean> utils = new OkHttpUtils2<GoodDetailsBean>();
-                                utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
-                                        .addParam(I.Cart.GOODS_ID, String.valueOf(cartBean.getGoodsId()))
-                                        .targetClass(GoodDetailsBean.class)
-                                        .execute(new OkHttpUtils2.OnCompleteListener<GoodDetailsBean>() {
-                                            @Override
-                                            public void onSuccess(GoodDetailsBean result) {
-                                                if (result != null) {
-                                                    cartBean.setGoods(result);
-                                                    cartList.add(cartBean);
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onError(String error) {
-
-                                            }
-                                        });
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                    }
-                });
-    }
-
     public static int getCartCount() {
         int num = 0;
         ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
@@ -239,5 +195,28 @@ public class UserUtils {
             num += count;
         }
         return num;
+    }
+
+    public static int getCartCurrencyPrice() {
+        int sumCurrencyPrice = 0;
+        ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+        for (CartBean cartBean : cartList) {
+            int count = cartBean.getCount();
+            String str = cartBean.getGoods().getCurrencyPrice();
+            int price = Integer.parseInt(str.substring(1));
+            sumCurrencyPrice += price * count;
+        }
+        return sumCurrencyPrice;
+    }
+    public static int getCartRankPrice() {
+        int sumRankPrice = 0;
+        ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
+        for (CartBean cartBean : cartList) {
+            int count = cartBean.getCount();
+            String str = cartBean.getGoods().getRankPrice();
+            int price = Integer.parseInt(str.substring(1));
+            sumRankPrice += price * count;
+        }
+        return sumRankPrice;
     }
 }

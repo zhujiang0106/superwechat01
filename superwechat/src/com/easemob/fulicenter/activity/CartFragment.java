@@ -44,6 +44,8 @@ public class CartFragment extends Fragment {
     int pageId = 1;
     TextView tvHint;
 
+    TextView tvSumPrice, tvSavePrice;
+
 
 
     public CartFragment() {
@@ -107,6 +109,12 @@ public class CartFragment extends Fragment {
         ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
         Log.i("main", "最新的cartList：" + cartList);
         mCartAdapter.initData(cartList);
+        int cartCurrencyPrice = UserUtils.getCartCurrencyPrice();
+        int cartRankPrice = UserUtils.getCartRankPrice();
+        tvSumPrice.setText("合计：￥"+cartRankPrice);
+        int price = cartCurrencyPrice - cartRankPrice;
+        tvSavePrice.setText("节省：￥" + price);
+
     }
     /*private void findNewGoodList(final int action, int pageid) {
         OkHttpUtils2<CartBean[]> utils = new OkHttpUtils2<CartBean[]>();
@@ -167,6 +175,8 @@ public class CartFragment extends Fragment {
         mCartAdapter = new CartAdapter(mContext, mCartList);
         mRecyclerView.setAdapter(mCartAdapter);
         tvHint = (TextView) layout.findViewById(R.id.tv_refresh_hint);
+        tvSumPrice = (TextView) layout.findViewById(R.id.tv_cart_total);
+        tvSavePrice = (TextView) layout.findViewById(R.id.tv_cart_save);
 
     }
 

@@ -61,8 +61,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Log.i("main", "现在的mCartList的大小是==" + mCartList.size());
             ImageUtils.setGoodThumb(mContext, mCartViewHolder.ivCartThumb, cart.getGoods().getGoodsThumb());
             mCartViewHolder.tvCartName.setText(cart.getGoods().getGoodsName());
-//            mCartViewHolder.tvCartPrice.setText(cart.getGoods().getRankPrice());
-            mCartViewHolder.tvCartPrice.setText(String.valueOf(getSumPrice(position)));
+            mCartViewHolder.tvCartPrice.setText("￥" + getSumPrice(position));
             mCartViewHolder.tvCartCount.setText("("+cart.getCount()+")");
         }
     }

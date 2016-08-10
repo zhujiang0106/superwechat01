@@ -1,6 +1,9 @@
 package com.easemob.fulicenter.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -64,6 +67,8 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
         btnCategory.setOnClickListener(this);
         btnCart.setOnClickListener(this);
         btnPersonal.setOnClickListener(this);
+
+        setUpdateListener();
     }
 
     private void initView() {
@@ -109,16 +114,25 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
                 setDrawable(btnCart, R.drawable.menu_item_cart_selected, Color.BLACK);
                 break;
             case R.id.btnPersonal:
-                index = 4;
                 setDrawable(btnPersonal, R.drawable.menu_item_personal_center_selected, Color.BLACK);
-                /*if (DemoHXSDKHelper.getInstance().isLogined()) {
+                if (DemoHXSDKHelper.getInstance().isLogined()) {
+                    index = 4;
                 } else {
-//                    startActivity(new Intent(this, FuliLoginActivity.class));
                     startActivityForResult(new Intent(this,FuliLoginActivity.class),ACTION);
-                }*/
+                }
                 break;
         }
         setFragment();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ACTION) {
+            if (DemoHXSDKHelper.getInstance().isLogined()) {
+                index = 4;
+            }
+        }
     }
 
     private void setFragment() {
@@ -148,29 +162,47 @@ public class FuliCenterMainActivity extends BaseActivity implements View.OnClick
         button.setCompoundDrawables(null,drawable,null,null);
     }
 
-  /*  @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ACTION) {
-            if (DemoHXSDKHelper.getInstance().isLogined()) {
-
-            } else {
-//                currentIndex = 3;
-            }
-        }
-    }*/
-
-    /*@Override
+    @Override
     protected void onResume() {
         super.onResume();
-        if (DemoHXSDKHelper.getInstance().isLogined()) {
-
-        } else {
-            index = currentIndex;
-            if (index == 3) {
-                index = 0;
-            }
-            setFragment();
+        if (!DemoHXSDKHelper.getInstance().isLogined() && index == 4) {
+            index = 0;
         }
-    }*/
+        setFragment();
+        initDrawable();
+        switch (currentIndex) {
+            case 0:
+                setDrawable(btnNewGoods, R.drawable.menu_item_new_good_selected, Color.BLACK);
+                break;
+            case 1:
+                setDrawable(btnBoutique, R.drawable.boutique_selected, Color.BLACK);
+                break;
+            case 2:
+                setDrawable(btnCategory, R.drawable.menu_item_category_selected, Color.BLACK);
+                break;
+        }
+    }
+
+    class MyBroadCastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initData();
+        }
+    }
+
+    MyBroadCastReceiver mMyBroadCastReceiver;
+
+    private void setUpdateListener() {
+        mMyBroadCastReceiver = new MyBroadCastReceiver();
+        IntentFilter filter = new IntentFilter("update_cart_list");
+        this.registerReceiver(mMyBroadCastReceiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mMyBroadCastReceiver != null) {
+            this.unregisterReceiver(mMyBroadCastReceiver);
+        }
+    }
 }

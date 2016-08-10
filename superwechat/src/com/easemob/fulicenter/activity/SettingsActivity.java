@@ -330,6 +330,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener{
                         FuliCenterApplication.getInstance().setUser(null);
                         FuliCenterApplication.getInstance().getUserMap().clear();
                         FuliCenterApplication.getInstance().getUserList().clear();
+                        FuliCenterApplication.getInstance().getCartList().clear();
                         pd.dismiss();
                         // 重新显示登陆页面
                         SettingsActivity.this.finish();

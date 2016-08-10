@@ -301,8 +301,6 @@ public class FuliLoginActivity extends Activity {
     }
 
     public void onPersonBack(View view) {
-        Intent intent = new Intent(FuliLoginActivity.this, FuliCenterMainActivity.class);
-        startActivity(intent);
         finish();
     }
 }

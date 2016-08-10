@@ -103,10 +103,51 @@ public class PersonFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        myThread();
+        // ** 免登陆情况 加载所有本地群和会话
+        //不是必须的，不加sdk也会自动异步去加载(不会重复加载)；
+        //加上的话保证进了主页面会话和群组都已经load完毕
+        long start = System.currentTimeMillis();
+        EMGroupManager.getInstance().loadAllGroups();
+        EMChatManager.getInstance().loadAllConversations();
+        String currentUser = EMChatManager.getInstance().getCurrentUser();
+        Log.i("main", "当前用户是：" + currentUser);
+        String userName = FuliCenterApplication.getInstance().getUserName();
+        Log.i("main", "当前用户名是什么？" + userName);
+        UserDao dao = new UserDao(mContext);
+        UserAvatar user = dao.getUserAvatar(userName);
+        if (user == null) {
+            Log.i("main", "有没有啊");
+            final OkHttpUtils2<String> utils = new OkHttpUtils2<String>();
+            utils.setRequestUrl(I.REQUEST_FIND_USER)
+                    .addParam(I.User.USER_NAME,userName)
+                    .targetClass(String.class)
+                    .execute(new OkHttpUtils2.OnCompleteListener<String>() {
+                        @Override
+                        public void onSuccess(String str) {
+                            Result result = Utils.getResultFromJson(str, UserAvatar.class);
+                            if (result != null & result.isRetMsg()) {
+                                UserAvatar user = (UserAvatar) result.getRetData();
+                                if (user != null) {
+                                    FuliCenterApplication.getInstance().setUser(user);
+                                    FuliCenterApplication.currentUserNick = user.getMUserNick();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                        }
+                    });
+        } else {
+            Log.i("main", "这里应该有吧？" + user.toString());
+            FuliCenterApplication.getInstance().setUser(user);
+            FuliCenterApplication.currentUserNick = user.getMUserNick();
+        }
+        new DownloadContactsListTask(mContext,userName).getContacts();
+//        myThread();
     }
 
-    private void myThread() {
+    /*private void myThread() {
         new Thread(new Runnable() {
             public void run() {
                 if (DemoHXSDKHelper.getInstance().isLogined()) {
@@ -158,7 +199,7 @@ public class PersonFragment extends Fragment {
                 }
             }
         }).start();
-    }
+    }*/
 
     class UpdateCollectCount extends BroadcastReceiver {
 

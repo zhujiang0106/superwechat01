@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.easemob.fulicenter.D;
@@ -50,8 +51,7 @@ public class CartFragment extends Fragment {
     TextView tvHint;
 
     TextView tvSumPrice, tvSavePrice;
-
-
+    Button btnBuy;
 
     public CartFragment() {
         // Required empty public constructor
@@ -74,6 +74,12 @@ public class CartFragment extends Fragment {
         setPullDownRefreshListener();
 //        setPullUpRefreshListener();
         setUpdateListener();
+        btnBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(mContext, AddressActivity.class));
+            }
+        });
     }
 
     @Override
@@ -193,6 +199,7 @@ public class CartFragment extends Fragment {
         tvHint = (TextView) layout.findViewById(R.id.tv_refresh_hint);
         tvSumPrice = (TextView) layout.findViewById(R.id.tv_cart_total);
         tvSavePrice = (TextView) layout.findViewById(R.id.tv_cart_save);
+        btnBuy = (Button) layout.findViewById(R.id.btn_cart_buy);
 
     }
 

@@ -11,6 +11,13 @@ public class OrderBean implements Serializable {
     private String orderCity;
     private String orderStreet;
 
+    public OrderBean(String orderName, String orderPhone, String orderCity, String orderStreet) {
+        this.orderName = orderName;
+        this.orderPhone = orderPhone;
+        this.orderCity = orderCity;
+        this.orderStreet = orderStreet;
+    }
+
     public String getOrderName() {
         return orderName;
     }

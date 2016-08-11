@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easemob.fulicenter.D;
 import com.easemob.fulicenter.DemoHXSDKHelper;
@@ -49,6 +50,7 @@ public class CartFragment extends Fragment {
 
     int pageId = 1;
     TextView tvHint;
+    int cartRankPrice;
 
     TextView tvSumPrice, tvSavePrice;
     Button btnBuy;
@@ -77,7 +79,11 @@ public class CartFragment extends Fragment {
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(mContext, AddressActivity.class));
+                if (DemoHXSDKHelper.getInstance().isLogined() && cartRankPrice > 0) {
+                    startActivity(new Intent(mContext, AddressActivity.class));
+                } else {
+                    Toast.makeText(mContext,"亲！要选择需要的商品哦！",Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -132,7 +138,7 @@ public class CartFragment extends Fragment {
         Log.i("main", "最新的cartList：" + cartList);
         mCartAdapter.initData(cartList);
         int cartCurrencyPrice = UserUtils.getCartCurrencyPrice();
-        int cartRankPrice = UserUtils.getCartRankPrice();
+        cartRankPrice = UserUtils.getCartRankPrice();
         tvSumPrice.setText("合计：￥"+cartRankPrice);
         int price = cartCurrencyPrice - cartRankPrice;
         tvSavePrice.setText("节省：￥" + price);

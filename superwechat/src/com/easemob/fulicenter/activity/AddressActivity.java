@@ -1,16 +1,20 @@
 package com.easemob.fulicenter.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easemob.fulicenter.R;
 
 public class AddressActivity extends Activity {
+    Context mContext;
     EditText etOrderName,etOrderPhone,etOrderStreet;
     Spinner spinCity;
     TextView tvTitle;
@@ -18,6 +22,7 @@ public class AddressActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         setContentView(R.layout.activity_address);
         initView();
         setListener();
@@ -27,7 +32,26 @@ public class AddressActivity extends Activity {
         btnBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                String orderName = etOrderName.getText().toString();
+                String orderPhone = etOrderPhone.getText().toString();
+                String orderStreet = etOrderStreet.getText().toString();
+                if (TextUtils.isEmpty(orderName)) {
+                    Toast.makeText(mContext,"收货人不能为空！",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(orderPhone)) {
+                    Toast.makeText(mContext,"手机号码不能为空！",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (!orderPhone.matches("[\\d]{11}")) {
+                    Toast.makeText(mContext,"手机号码格式错误！",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(orderStreet)) {
+                    Toast.makeText(mContext,"街道地址不能为空！",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Toast.makeText(mContext,"亲，购买成功了哟！",Toast.LENGTH_LONG).show();
             }
         });
     }

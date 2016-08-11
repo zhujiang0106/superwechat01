@@ -78,7 +78,7 @@ public class GoodDetailsActivity extends Activity {
         final ArrayList<CartBean> cartList = FuliCenterApplication.getInstance().getCartList();
         CartBean cartBean = new CartBean();
         for (CartBean cart : cartList) {
-            int id = cart.getGoods().getId();
+            int id = cart.getGoodsId();
             if (id == mGoodId) {
                 cart.setCount(cart.getCount()+1);
                 new UpdateCartTask(mContext, cart, false).updareCart();

@@ -37,6 +37,7 @@
             <EditText
                 android:id="@+id/et_address_buyer"
                 android:layout_toRightOf="@id/tv_address_buyer"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
@@ -57,6 +58,7 @@
             <EditText
                 android:id="@+id/et_address_tel"
                 android:layout_toRightOf="@id/tv_address_tel"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
@@ -77,8 +79,12 @@
             <Spinner
                 android:id="@+id/spi_address_city"
                 android:layout_toRightOf="@id/tv_address_city"
+                android:layout_centerVertical="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:scrollbarStyle="insideInset"
+                android:entries="@array/area"
+                android:background="@color/google_yellow"/>
         </RelativeLayout>
         <RelativeLayout
             android:padding="8dp"
@@ -97,6 +103,7 @@
             <EditText
                 android:id="@+id/et_address_street"
                 android:layout_toRightOf="@id/tv_address_street"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </RelativeLayout>

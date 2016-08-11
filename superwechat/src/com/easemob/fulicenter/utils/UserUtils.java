@@ -206,7 +206,7 @@ public class UserUtils {
         for (CartBean cartBean : cartList) {
             int count = cartBean.getCount();
             GoodDetailsBean good = cartBean.getGoods();
-            if (cartGoodList.contains(good)) {
+            if (good != null && cartGoodList.contains(good)) {
                 String str = good.getCurrencyPrice();
                 int price = Integer.parseInt(str.substring(1));
                 sumCurrencyPrice += price * count;
@@ -222,7 +222,7 @@ public class UserUtils {
         for (CartBean cartBean : cartList) {
             int count = cartBean.getCount();
             GoodDetailsBean good = cartBean.getGoods();
-            if (cartGoodList.contains(good)) {
+            if (good != null && cartGoodList.contains(good)) {
                 String str = good.getRankPrice();
                 int price = Integer.parseInt(str.substring(1));
                 sumRankPrice += price * count;
